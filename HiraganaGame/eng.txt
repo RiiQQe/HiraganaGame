@@ -36,7 +36,6 @@ coffee
 sometimes
 always
 dinner
-where
 student cafeteria
 juice
 morning
@@ -50,7 +49,6 @@ to study
 home
 name
 country
-where
 major
 computer science
 hobby

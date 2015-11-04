@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,7 +12,7 @@ import javax.swing.*;
 
 public class Game extends JFrame{
 
-	private JButton btnSubmit, btnStart, btnRestart;
+	private JButton btnSubmit, btnStart, btnRestart, btnCorr;
 	private JTextField tfAnswer, tfTranslate;
 	
 	private JTextArea taResult;
@@ -29,7 +30,7 @@ public class Game extends JFrame{
 	
 	private int[] allResults = new int[100];
 	
-	final int size = 65;
+	final int size = 63;
 	
 	private String[] arrEng = new String[size];
 	private String[] arrHir = new String[size];
@@ -86,6 +87,9 @@ public class Game extends JFrame{
     	bg.add(rbHir);
     	
     	sp = new JScrollPane(taResult);
+    	btnCorr = new JButton("CORR = GREEN, WRONG = RED");
+    	btnCorr.setEnabled(false);
+    	btnCorr.setBackground(Color.GREEN);
     	
 		//Setting layout for the panel
 		panel.setLayout(new GridLayout(8,2));
@@ -98,6 +102,7 @@ public class Game extends JFrame{
     	panel2.add(btnStart);
     	panel2.add(btnRestart);
     	panel2.add(lblAllResults);
+    	panel2.add(btnCorr);
     	
 		//panel.add(btnStart);
     	panel.add(lblTranslate);
@@ -154,6 +159,11 @@ public class Game extends JFrame{
 				btnRestart.setEnabled(false);
 				taResult.setText(null);
 				
+				nrOfCorr = 0;
+		    	nrDone = 0;
+				
+		    	lblResult.setText("Your score : " + nrOfCorr + "/" + size + "  Done: " + nrDone);
+		    	
 				for(int i = 0; i < ifDone.length; i++) ifDone[i] = true;
 			}
         	
@@ -166,11 +176,15 @@ public class Game extends JFrame{
 					
 				if(!tfAnswer.getText().equals("")){
 					nrDone++;
-					String line = tfAnswer.getText().trim();
+					String line = tfAnswer.getText().trim().toLowerCase();
 					if(line.equals(arrEng[randomNr])){
 						nrOfCorr++;
-						taResult.append("Correct!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
-					}else taResult.append("Wrong!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
+						taResult.append(line + " is CORRECT!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
+						btnCorr.setBackground(Color.GREEN);
+					}else {
+						taResult.append(line + " is WRONG!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
+				    	btnCorr.setBackground(Color.RED);
+					}
 					
 					taResult.append("\n");
 					taResult.append(nrOfCorr + " / " + size);
@@ -292,6 +306,7 @@ public class Game extends JFrame{
     protected void allDone(){
     	JOptionPane.showMessageDialog(null, "Result : " + nrOfCorr + "/" + size );
     	nrOfCorr = 0;
+    	nrDone = 0;
     	//lblResult.setText("All done!");
     }
 

@@ -2,7 +2,7 @@ senmon
 ryuugakuasei
 ikura
 shumi
-dochira
+doko / dochira
 kuni
 kenkyuushitsu
 denwa bangoo
@@ -36,7 +36,6 @@ koohii
 tokidoki
 itsumo
 ban-gohan
-doko
 gakushoku
 juusu
 asa
@@ -50,7 +49,6 @@ benkyoo-shimasu
 uchi
 namae
 kuni
-dochira
 senmon
 keisankougaku
 shumi
