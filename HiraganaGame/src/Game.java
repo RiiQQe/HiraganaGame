@@ -141,7 +141,8 @@ public class Game extends JFrame{
 					
 				if(!tfAnswer.getText().equals("")){
 					nrDone++;
-					if(tfAnswer.getText().equals(arrEng[randomNr])){
+					String line = tfAnswer.getText().trim();
+					if(line.equals(arrEng[randomNr])){
 						nrOfCorr++;
 						taResult.append("Correct!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
 					}else taResult.append("Wrong!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
@@ -230,12 +231,17 @@ public class Game extends JFrame{
     	while(!ifDone[randomNr]) {
     		k++;
     		randomNr = genRandomNr();
-    		if(nrDone > size) {
+    		if(k > size * 3) {
     			done = false;
     			break;
     		}
     	}
     	if(done){
+    		int c = 0;
+    		while(!ifDone[randomNr]){
+    			c++;
+    			randomNr = c;
+    		}
     		randomString = arrHir[randomNr];
         	tfTranslate.setText(randomString);
     	}else allDone();
