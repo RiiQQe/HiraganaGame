@@ -151,6 +151,8 @@ public class Game extends JFrame{
 					btnSubmit.setEnabled(true);
 					btnStart.setEnabled(false);
 					btnRestart.setEnabled(true);
+					tfHir.setEnabled(false);
+					tfEng.setEnabled(false);
 					genRandomString();
 						
 				}
@@ -168,6 +170,9 @@ public class Game extends JFrame{
 				btnStart.setEnabled(true);
 				btnRestart.setEnabled(false);
 				taResult.setText(null);
+
+				tfHir.setEnabled(true);
+				tfEng.setEnabled(true);
 				
 				btnCorr.setBackground(Color.GRAY);
 				
