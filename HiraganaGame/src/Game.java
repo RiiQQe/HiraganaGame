@@ -13,9 +13,11 @@ import javax.swing.*;
 public class Game extends JFrame{
 
 	private JButton btnSubmit, btnStart, btnRestart, btnCorr;
-	private JTextField tfAnswer, tfTranslate;
+	private JTextField tfAnswer, tfTranslate, tfEng, tfHir;
 	
 	private JTextArea taResult;
+	
+	String hirText, engText;
 	
 	private JLabel lblAnswer, lblTranslate, lblResult, lblStart, lblAllResults;
 	
@@ -69,6 +71,8 @@ public class Game extends JFrame{
     	
     	tfAnswer = new JTextField();
     	tfTranslate = new JTextField();
+    	tfHir = new JTextField("hir",15);
+    	tfEng = new JTextField("eng",15);
 	 
     	taResult = new JTextArea("", 120, 600);
     	
@@ -103,6 +107,8 @@ public class Game extends JFrame{
     	panel2.add(btnRestart);
     	panel2.add(lblAllResults);
     	panel2.add(btnCorr);
+    	panel2.add(tfEng);
+    	panel2.add(tfHir);
     	
 		//panel.add(btnStart);
     	panel.add(lblTranslate);
@@ -135,8 +141,12 @@ public class Game extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(rbHir.isSelected() || rbEng.isSelected()){
-					if(rbHir.isSelected()) genArr(true);
-					else genArr(false);
+					hirText = tfHir.getText() + ".txt";
+					engText = tfEng.getText() + ".txt";
+					
+					
+					if(rbHir.isSelected()) genArr(engText, hirText);
+					else genArr(hirText, engText);
 					tfAnswer.setEditable(true);
 					btnSubmit.setEnabled(true);
 					btnStart.setEnabled(false);
@@ -202,70 +212,39 @@ public class Game extends JFrame{
 
     }
 	/*Very wierd done, but it works for now..*/
-    protected void genArr(boolean b) {
-    	if(!b){
-    		try{
-    			BufferedReader brIn = new BufferedReader(new FileReader("hir.txt"));
-    			String line = "";
-    			int k = 0;
-    			while((line = brIn.readLine()) != null){
-    				if(!line.equals("")){
-    					line = line.trim();
-    					arrHir[k] = line;
-    					k++;	
-    				}
-    			}
-    		}catch(IOException e) {
-    			System.out.println(e);
-    		}
-    		try{
-    			BufferedReader brIn = new BufferedReader(new FileReader("eng.txt"));
-    			String line = "";
-    			int k = 0;
-    			while((line = brIn.readLine()) != null){
-    				if(!line.equals("")){
-    					line = line.trim();
-    					arrEng[k] = line;
-    					k++;
-    				}
-    			}
-    		}catch(IOException e) {
-    			System.out.println(e);
-    		}
+    protected void genArr(String from, String to) {
+    	
+		try{
+			BufferedReader brIn = new BufferedReader(new FileReader(from));
+			String line = "";
+			int k = 0;
+			while((line = brIn.readLine()) != null){
+				if(!line.equals("")){
+					line = line.trim();
+					arrHir[k] = line;
+					k++;	
+				}
+			}
+		}catch(IOException e) {
+			System.out.println(e);
+		}
+		try{
+			BufferedReader brIn = new BufferedReader(new FileReader(to));
+			String line = "";
+			int k = 0;
+			while((line = brIn.readLine()) != null){
+				if(!line.equals("")){
+					line = line.trim();
+					arrEng[k] = line;
+					k++;
+				}
+			}
+		}catch(IOException e) {
+			System.out.println(e);
+		}
     		
-    	}else{
-    		try{
-    			BufferedReader brIn = new BufferedReader(new FileReader("eng.txt"));
-    			String line = "";
-    			int k = 0;
-    			while((line = brIn.readLine()) != null){
-    				if(!line.equals("")){
-    					line = line.trim();
-    					arrHir[k] = line;
-    					k++;	
-    				}
-    			}
-    		}catch(IOException e) {
-    			System.out.println(e);
-    		}
-    		try{
-    			BufferedReader brIn = new BufferedReader(new FileReader("hir.txt"));
-    			String line = "";
-    			int k = 0;
-    			while((line = brIn.readLine()) != null){
-    				if(!line.equals("")){
-    					line = line.trim();
-    					arrEng[k] = line;
-    					k++;
-    				}
-    			}
-    		}catch(IOException e) {
-    			System.out.println(e);
-    		}
-    		
-    	}
-		
-	}
+    }		
+	
 
 
 	protected void genRandomString() {
