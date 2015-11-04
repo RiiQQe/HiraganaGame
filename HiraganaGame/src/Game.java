@@ -32,7 +32,7 @@ public class Game extends JFrame{
 	
 	private int[] allResults = new int[100];
 	
-	final int size = 63;
+	final int size = 91;
 	
 	private String[] arrEng = new String[size];
 	private String[] arrHir = new String[size];
@@ -106,7 +106,7 @@ public class Game extends JFrame{
     	panel2.add(btnStart);
     	panel2.add(btnRestart);
     	panel2.add(lblAllResults);
-    	panel2.add(btnCorr);
+    	//panel2.add(btnCorr);
     	panel2.add(tfEng);
     	panel2.add(tfHir);
     	
@@ -117,7 +117,7 @@ public class Game extends JFrame{
     	panel.add(lblAnswer);
     	panel.add(tfAnswer);
     	
-    	panel.add(lblResult);
+    	panel.add(btnCorr);
     	
     	panel.add(btnSubmit);
     	
@@ -204,7 +204,7 @@ public class Game extends JFrame{
 					}
 					
 					taResult.append("\n");
-					taResult.append(nrOfCorr + " / " + size);
+					taResult.append(nrOfCorr + " / " + nrDone);
 					ifDone[randomNr] = false;
 					tfAnswer.setText("");
 					taResult.append("\n");
@@ -218,11 +218,11 @@ public class Game extends JFrame{
     }
 	/*Very wierd done, but it works for now..*/
     protected void genArr(String from, String to) {
-    	
+    	int k = 0; 
 		try{
 			BufferedReader brIn = new BufferedReader(new FileReader(from));
 			String line = "";
-			int k = 0;
+			k = 0;
 			while((line = brIn.readLine()) != null){
 				if(!line.equals("")){
 					line = line.trim();
@@ -230,13 +230,14 @@ public class Game extends JFrame{
 					k++;	
 				}
 			}
+			System.out.println("size of " + from + ": " + k);
 		}catch(IOException e) {
 			System.out.println(e);
 		}
 		try{
 			BufferedReader brIn = new BufferedReader(new FileReader(to));
 			String line = "";
-			int k = 0;
+			k = 0;
 			while((line = brIn.readLine()) != null){
 				if(!line.equals("")){
 					line = line.trim();
@@ -244,9 +245,12 @@ public class Game extends JFrame{
 					k++;
 				}
 			}
+			System.out.println("size of " + to + ": " + k);
 		}catch(IOException e) {
 			System.out.println(e);
 		}
+		
+		System.out.println(arrEng[k-1] + " = " + arrHir[k-1]);
     		
     }		
 	
