@@ -11,12 +11,12 @@ import javax.swing.*;
 
 public class Game extends JFrame{
 
-	private JButton btnSubmit, btnStart;
+	private JButton btnSubmit, btnStart, btnRestart;
 	private JTextField tfAnswer, tfTranslate;
 	
 	private JTextArea taResult;
 	
-	private JLabel lblAnswer, lblTranslate, lblResult, lblStart;
+	private JLabel lblAnswer, lblTranslate, lblResult, lblStart, lblAllResults;
 	
 	private JRadioButton rbHir, rbEng;
 	
@@ -26,6 +26,8 @@ public class Game extends JFrame{
 	
 	private JPanel panel2 = new JPanel();
 	private JPanel panel3 = new JPanel();
+	
+	private int[] allResults = new int[100];
 	
 	final int size = 65;
 	
@@ -58,6 +60,9 @@ public class Game extends JFrame{
     	
     	btnSubmit = new JButton("Submit");
     	btnStart = new JButton("Start Game");
+    	btnRestart = new JButton("Restart Game");
+    	
+    	btnRestart.setEnabled(false);
     	
     	btnSubmit.setEnabled(false);
     	
@@ -75,6 +80,8 @@ public class Game extends JFrame{
     	lblResult = new JLabel("Right / Wrong");
     	lblStart = new JLabel("Choose hir-eng or eng-hir");
     	
+    	lblAllResults = new JLabel("");
+    	
     	bg.add(rbEng);
     	bg.add(rbHir);
     	
@@ -89,7 +96,9 @@ public class Game extends JFrame{
     	panel2.add(rbHir);
     	panel2.add(lblStart);
     	panel2.add(btnStart);
-    	    	
+    	panel2.add(btnRestart);
+    	panel2.add(lblAllResults);
+    	
 		//panel.add(btnStart);
     	panel.add(lblTranslate);
     	panel.add(tfTranslate);
@@ -126,11 +135,27 @@ public class Game extends JFrame{
 					tfAnswer.setEditable(true);
 					btnSubmit.setEnabled(true);
 					btnStart.setEnabled(false);
+					btnRestart.setEnabled(true);
 					genRandomString();
 						
 				}
 			}
 
+        	
+        });
+        
+        btnRestart.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tfAnswer.setEditable(false);
+				btnSubmit.setEnabled(false);
+				btnStart.setEnabled(true);
+				btnRestart.setEnabled(false);
+				taResult.setText(null);
+				
+				for(int i = 0; i < ifDone.length; i++) ifDone[i] = true;
+			}
         	
         });
         
@@ -146,16 +171,19 @@ public class Game extends JFrame{
 						nrOfCorr++;
 						taResult.append("Correct!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
 					}else taResult.append("Wrong!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
+					
 					taResult.append("\n");
 					taResult.append(nrOfCorr + " / " + size);
 					ifDone[randomNr] = false;
 					tfAnswer.setText("");
 					taResult.append("\n");
 					lblResult.setText("Your score : " + nrOfCorr + "/" + size + "  Done: " + nrDone);
+					tfAnswer.requestFocus();
 					genRandomString();
 				}
 			}
         });
+
     }
 	/*Very wierd done, but it works for now..*/
     protected void genArr(boolean b) {
@@ -236,15 +264,25 @@ public class Game extends JFrame{
     			break;
     		}
     	}
-    	if(done){
+    	if(!done){
     		int c = 0;
+    		boolean end = true;
     		while(!ifDone[randomNr]){
     			c++;
     			randomNr = c;
+    			if(randomNr == size) {
+    				end = false; 
+    				break;
+    			}
     		}
-    		randomString = arrHir[randomNr];
-        	tfTranslate.setText(randomString);
-    	}else allDone();
+    		if(end){	
+    			randomString = arrHir[randomNr];
+            	tfTranslate.setText(randomString);	
+    		} else allDone();
+    	}else {
+			randomString = arrHir[randomNr];
+        	tfTranslate.setText(randomString);	
+    	}
     }
     
     protected int genRandomNr(){
@@ -253,6 +291,7 @@ public class Game extends JFrame{
     
     protected void allDone(){
     	JOptionPane.showMessageDialog(null, "Result : " + nrOfCorr + "/" + size );
+    	nrOfCorr = 0;
     	//lblResult.setText("All done!");
     }
 
