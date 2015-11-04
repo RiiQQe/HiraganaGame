@@ -89,7 +89,7 @@ public class Game extends JFrame{
     	sp = new JScrollPane(taResult);
     	btnCorr = new JButton("CORR = GREEN, WRONG = RED");
     	btnCorr.setEnabled(false);
-    	btnCorr.setBackground(Color.GREEN);
+    	btnCorr.setBackground(Color.GRAY);
     	
 		//Setting layout for the panel
 		panel.setLayout(new GridLayout(8,2));
@@ -158,6 +158,8 @@ public class Game extends JFrame{
 				btnStart.setEnabled(true);
 				btnRestart.setEnabled(false);
 				taResult.setText(null);
+				
+				btnCorr.setBackground(Color.GRAY);
 				
 				nrOfCorr = 0;
 		    	nrDone = 0;
