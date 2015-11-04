@@ -20,6 +20,8 @@ public class Game extends JFrame{
 	
 	private JRadioButton rbHir, rbEng;
 	
+	private JScrollPane sp;
+	
 	private ButtonGroup bg = new ButtonGroup();
 	
 	private JPanel panel2 = new JPanel();
@@ -32,6 +34,7 @@ public class Game extends JFrame{
 	
 	private int randomNr; 
 	int nrOfCorr, min = 0, max = size - 1; 
+	int nrDone = 0;
 	boolean[] ifDone = new boolean[size];
 	
 	Random random = new Random();
@@ -74,17 +77,20 @@ public class Game extends JFrame{
     	
     	bg.add(rbEng);
     	bg.add(rbHir);
-
+    	
+    	sp = new JScrollPane(taResult);
+    	
 		//Setting layout for the panel
 		panel.setLayout(new GridLayout(8,2));
-		frame.setLayout(new GridLayout(2,1));
+		frame.setLayout(new GridLayout(3,1));
 		/*THIS IS HOW IT WAS*/
     	panel2.add(btnStart);
     	panel2.add(rbEng);
     	panel2.add(rbHir);
     	panel2.add(lblStart);
+    	panel2.add(btnStart);
     	    	
-		panel.add(btnStart);
+		//panel.add(btnStart);
     	panel.add(lblTranslate);
     	panel.add(tfTranslate);
     	
@@ -92,12 +98,14 @@ public class Game extends JFrame{
     	panel.add(tfAnswer);
     	
     	panel.add(lblResult);
-    	panel.add(taResult);
     	
     	panel.add(btnSubmit);
     	
+    	frame.getContentPane().add(sp);
+    	
     	frame.add(panel2);
     	frame.add(panel);
+    	frame.add(panel3);
     	
     	frame.pack();
     	frame.setVisible(true);
@@ -132,6 +140,7 @@ public class Game extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 					
 				if(!tfAnswer.getText().equals("")){
+					nrDone++;
 					if(tfAnswer.getText().equals(arrEng[randomNr])){
 						nrOfCorr++;
 						taResult.append("Correct!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
@@ -141,6 +150,7 @@ public class Game extends JFrame{
 					ifDone[randomNr] = false;
 					tfAnswer.setText("");
 					taResult.append("\n");
+					lblResult.setText("Your score : " + nrOfCorr + "/" + size + "  Done: " + nrDone);
 					genRandomString();
 				}
 			}
@@ -220,7 +230,7 @@ public class Game extends JFrame{
     	while(!ifDone[randomNr]) {
     		k++;
     		randomNr = genRandomNr();
-    		if(k > size * 3) {
+    		if(nrDone > size) {
     			done = false;
     			break;
     		}
