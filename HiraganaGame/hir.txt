@@ -89,3 +89,4 @@ yama
 denwa
 watashi wa hon o yomimasu
 ame
+yomimasu

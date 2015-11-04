@@ -30,17 +30,20 @@ public class Game extends JFrame{
 	private JPanel panel2 = new JPanel();
 	private JPanel panel3 = new JPanel();
 	
-	private int[] allResults = new int[100];
+	int size;
 	
-	final int size = 91;
+	//private String[] arrEng = new String[size];
+	//private String[] arrHir = new String[size];
+	private LinkedList<String> arrEng = new LinkedList<String>();
+	private LinkedList<String> arrHir = new LinkedList<String>();
 	
-	private String[] arrEng = new String[size];
-	private String[] arrHir = new String[size];
+	//private LinkedList<boolean> arrHir = new LinkedList<String>();
+	
 	
 	private int randomNr; 
-	int nrOfCorr, min = 0, max = size - 1; 
+	int nrOfCorr, min = 0, max; 
 	int nrDone = 0;
-	boolean[] ifDone = new boolean[size];
+	boolean[] ifDone; //= new boolean[size];
 	
 	Random random = new Random();
 	
@@ -56,8 +59,6 @@ public class Game extends JFrame{
     
 	private void initUI() {
 		
-    	for(int i = 0; i < ifDone.length; i++) ifDone[i] = true;
-    	
     	rbHir = new JRadioButton("Eng - Hir");
     	rbEng = new JRadioButton("Hir - Eng");
     	
@@ -165,6 +166,8 @@ public class Game extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				arrHir.clear();
+				arrEng.clear();
 				tfAnswer.setEditable(false);
 				btnSubmit.setEnabled(false);
 				btnStart.setEnabled(true);
@@ -194,12 +197,12 @@ public class Game extends JFrame{
 				if(!tfAnswer.getText().equals("")){
 					nrDone++;
 					String line = tfAnswer.getText().trim().toLowerCase();
-					if(line.equals(arrEng[randomNr])){
+					if(line.equals(arrEng.get(randomNr))){
 						nrOfCorr++;
-						taResult.append(line + " is CORRECT!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
+						taResult.append(line + " is CORRECT!         " + arrEng.get(randomNr) + " = " + arrHir.get(randomNr));
 						btnCorr.setBackground(Color.GREEN);
 					}else {
-						taResult.append(line + " is WRONG!         " + arrEng[randomNr] + " = " + arrHir[randomNr]);
+						taResult.append(line + " is WRONG!         " + arrEng.get(randomNr) + " = " + arrHir.get(randomNr));
 				    	btnCorr.setBackground(Color.RED);
 					}
 					
@@ -226,11 +229,15 @@ public class Game extends JFrame{
 			while((line = brIn.readLine()) != null){
 				if(!line.equals("")){
 					line = line.trim();
-					arrHir[k] = line;
+					arrHir.add(line);
 					k++;	
 				}
 			}
-			System.out.println("size of " + from + ": " + k);
+			size = k;
+			max = size - 1; 
+			ifDone = new boolean[size];
+			for(int i = 0; i < ifDone.length; i++) ifDone[i] = true;
+	    	
 		}catch(IOException e) {
 			System.out.println(e);
 		}
@@ -241,16 +248,14 @@ public class Game extends JFrame{
 			while((line = brIn.readLine()) != null){
 				if(!line.equals("")){
 					line = line.trim();
-					arrEng[k] = line;
+					arrEng.add(line);
 					k++;
 				}
 			}
-			System.out.println("size of " + to + ": " + k);
 		}catch(IOException e) {
 			System.out.println(e);
 		}
 		
-		System.out.println(arrEng[k-1] + " = " + arrHir[k-1]);
     		
     }		
 	
@@ -280,11 +285,11 @@ public class Game extends JFrame{
     			}
     		}
     		if(end){	
-    			randomString = arrHir[randomNr];
+    			randomString = arrHir.get(randomNr);
             	tfTranslate.setText(randomString);	
     		} else allDone();
     	}else {
-			randomString = arrHir[randomNr];
+			randomString = arrHir.get(randomNr);
         	tfTranslate.setText(randomString);	
     	}
     }
@@ -297,12 +302,12 @@ public class Game extends JFrame{
     	JOptionPane.showMessageDialog(null, "Result : " + nrOfCorr + "/" + size );
     	nrOfCorr = 0;
     	nrDone = 0;
-    	//lblResult.setText("All done!");
+    	btnSubmit.setEnabled(false);
+    	taResult.append("YOU NEED TO RESTART THE GAME");
     }
 
 	public static void main(String[] args) {
     	Game ex = new Game();
-                //ex.setVisible(true);
     }
             
 	
