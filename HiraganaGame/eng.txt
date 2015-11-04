@@ -50,7 +50,7 @@ to study
 home
 name
 country
-who
+where
 major
 computer science
 hobby
