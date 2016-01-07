@@ -316,7 +316,8 @@ public class Game extends JFrame{
     	    tfAnswer.setEditable(false);
     	}
     	else{
-    		taResult.setText("Your wrong answers: \n");
+    		taResult.setText("Number of wrong: " + temp + "\n");
+    		taResult.append("Your wrong answers: \n");
 	    	for(int i = 0; i < temp; i++){
 	    		taResult.append(arrEngWrong.get(i) + " = " + arrHirWrong.get(i) + "\n");
 	    		arrHir.add(arrHirWrong.get(i));
