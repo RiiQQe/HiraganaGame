@@ -15,7 +15,7 @@ public class Game extends JFrame{
 	private JButton btnSubmit, btnStart, btnRestart, btnCorr;
 	private JTextField tfAnswer, tfTranslate, tfEng, tfHir;
 	
-	private JTextArea taResult;
+	private JTextArea taResult, taWrongs;
 	
 	String hirText, engText;
 	
@@ -31,15 +31,17 @@ public class Game extends JFrame{
 	private JPanel panel3 = new JPanel();
 	
 	int size;
+	int nrOfWrong = 0;
 	
 	//private String[] arrEng = new String[size];
 	//private String[] arrHir = new String[size];
 	private LinkedList<String> arrEng = new LinkedList<String>();
 	private LinkedList<String> arrHir = new LinkedList<String>();
 	
+	private LinkedList<String> arrEngWrong = new LinkedList<String>();
+	private LinkedList<String> arrHirWrong = new LinkedList<String>();
+	
 	//private LinkedList<boolean> arrHir = new LinkedList<String>();
-	
-	
 	private int randomNr; 
 	int nrOfCorr, min = 0, max; 
 	int nrDone = 0;
@@ -58,7 +60,6 @@ public class Game extends JFrame{
 
     
 	private void initUI() {
-		
     	rbHir = new JRadioButton("Eng - Hir");
     	rbEng = new JRadioButton("Hir - Eng");
     	
@@ -163,7 +164,6 @@ public class Game extends JFrame{
         });
         
         btnRestart.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				arrHir.clear();
@@ -202,6 +202,9 @@ public class Game extends JFrame{
 						taResult.append(line + " is CORRECT!         " + arrEng.get(randomNr) + " = " + arrHir.get(randomNr));
 						btnCorr.setBackground(Color.GREEN);
 					}else {
+						nrOfWrong++;
+						arrEngWrong.add(arrEng.get(randomNr));
+						arrHirWrong.add(arrHir.get(randomNr));
 						taResult.append(line + " is WRONG!         " + arrEng.get(randomNr) + " = " + arrHir.get(randomNr));
 				    	btnCorr.setBackground(Color.RED);
 					}
@@ -258,8 +261,6 @@ public class Game extends JFrame{
 		
     		
     }		
-	
-
 
 	protected void genRandomString() {
     	randomNr = genRandomNr();
@@ -299,11 +300,19 @@ public class Game extends JFrame{
     }
     
     protected void allDone(){
-    	JOptionPane.showMessageDialog(null, "Result : " + nrOfCorr + "/" + size );
+    	//JOptionPane.showMessageDialog(null, "Result : " + nrOfCorr + "/" + size );
     	nrOfCorr = 0;
     	nrDone = 0;
     	btnSubmit.setEnabled(false);
-    	taResult.append("YOU NEED TO RESTART THE GAME");
+    	if(nrOfWrong == 0) JOptionPane.showMessageDialog(null, "Well done, Lesson finished!");
+    	else{
+    		taResult.setText("Your wrong answers: \n");
+	    	for(int i = 0; i < nrOfWrong; i++){
+	    		taResult.append(arrEngWrong.get(i) + " = " + arrHirWrong.get(i) + "\n");
+	    	}
+    	}
+    	nrOfWrong = 0;
+	    taResult.append("YOU NEED TO RESTART THE GAME");
     }
 
 	public static void main(String[] args) {
