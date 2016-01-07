@@ -173,6 +173,8 @@ public class Game extends JFrame{
 				btnStart.setEnabled(true);
 				btnRestart.setEnabled(false);
 				taResult.setText(null);
+				
+				tfAnswer.setEditable(true);
 
 				tfHir.setEnabled(true);
 				tfEng.setEnabled(true);
@@ -304,16 +306,37 @@ public class Game extends JFrame{
     	nrOfCorr = 0;
     	nrDone = 0;
     	btnSubmit.setEnabled(false);
-    	if(nrOfWrong == 0) JOptionPane.showMessageDialog(null, "Well done, Lesson finished!");
+    	arrHir.clear();
+		arrEng.clear();
+		int temp = nrOfWrong;
+		nrOfWrong = 0;
+    	if(temp == 0) {
+    		JOptionPane.showMessageDialog(null, "Well done, Lesson finished!");
+    	    taResult.append("YOU NEED TO RESTART THE GAME");
+    	    tfAnswer.setEditable(false);
+    	}
     	else{
     		taResult.setText("Your wrong answers: \n");
-	    	for(int i = 0; i < nrOfWrong; i++){
+	    	for(int i = 0; i < temp; i++){
 	    		taResult.append(arrEngWrong.get(i) + " = " + arrHirWrong.get(i) + "\n");
+	    		arrHir.add(arrHirWrong.get(i));
+	    		arrEng.add(arrEngWrong.get(i));
+	    		ifDone[i] = true;
+	    		btnSubmit.setEnabled(true);
 	    	}
+	    	int reply = JOptionPane.showConfirmDialog(null, "Do you want to redo the wrong entries?", "Ones more", JOptionPane.YES_NO_OPTION);
+	        if (reply == JOptionPane.YES_OPTION) {
+	        	taResult.append("Redooing \n");
+	        	genRandomString();
+	        }
+	        else {
+	        	tfAnswer.setEditable(false);
+	        	btnSubmit.setEnabled(false);
+	    	    taResult.append("YOU NEED TO RESTART THE GAME");
+	        }
     	}
-    	nrOfWrong = 0;
-	    taResult.append("YOU NEED TO RESTART THE GAME");
     }
+    
 
 	public static void main(String[] args) {
     	Game ex = new Game();
