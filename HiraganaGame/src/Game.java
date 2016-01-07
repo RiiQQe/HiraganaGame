@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -6,13 +7,17 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 import javax.swing.*;
 
 public class Game extends JFrame{
 
-	private JButton btnSubmit, btnStart, btnRestart, btnCorr;
+	private JButton btnSubmit, btnStart, btnRestart, btnCorr, btnMine;
 	private JTextField tfAnswer, tfTranslate, tfEng, tfHir;
 	
 	private JTextArea taResult;
@@ -61,10 +66,18 @@ public class Game extends JFrame{
     	btnSubmit = new JButton("Submit");
     	btnStart = new JButton("Start Game");
     	btnRestart = new JButton("Restart Game");
+    	btnMine = new JButton("Go to my website!");
+    	
+    	btnMine.setBorderPainted(false);
+    	btnMine.setFocusPainted(false);
+    	btnMine.setContentAreaFilled(false);
+    	
     	
     	btnRestart.setEnabled(false);
     	
     	btnSubmit.setEnabled(false);
+    	
+    	btnMine.setEnabled(true);
     	
     	tfAnswer = new JTextField();
     	tfTranslate = new JTextField();
@@ -119,6 +132,7 @@ public class Game extends JFrame{
     	panel.add(btnSubmit);
     	
     	panel3.add(lblMine);
+    	panel3.add(btnMine);
     	
     	frame.getContentPane().add(sp);
     	
@@ -241,6 +255,36 @@ public class Game extends JFrame{
 				}
 			}
         });
+        
+        
+        btnMine.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					URL url = new URL("http://www.rickardlindstedt.com");
+			        openWebpage(url.toURI());
+			    } catch (URISyntaxException e1) {
+			        e1.printStackTrace();
+			    } catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+        	
+        });
+	}
+	public static void openWebpage(URI uri) {
+	    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+	        try {
+	            desktop.browse(uri);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 	}
 	protected void resetVars(){
 		nrOfCorr = 0;
