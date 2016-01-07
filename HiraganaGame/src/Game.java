@@ -33,19 +33,16 @@ public class Game extends JFrame{
 	int size;
 	int nrOfWrong = 0;
 	
-	//private String[] arrEng = new String[size];
-	//private String[] arrHir = new String[size];
 	private LinkedList<String> arrEng = new LinkedList<String>();
 	private LinkedList<String> arrHir = new LinkedList<String>();
 	
 	private LinkedList<String> arrEngWrong = new LinkedList<String>();
 	private LinkedList<String> arrHirWrong = new LinkedList<String>();
 	
-	//private LinkedList<boolean> arrHir = new LinkedList<String>();
 	private int randomNr; 
 	int nrOfCorr, min = 0, max; 
-	int nrDone = 0;
-	boolean[] ifDone; //= new boolean[size];
+	int nrOfDone = 0;
+	boolean[] ifDone;
 	
 	Random random = new Random();
 	
@@ -53,6 +50,8 @@ public class Game extends JFrame{
 	
 	final JFrame frame = new JFrame();
 	final JPanel panel = new JPanel();
+	
+	private dictionary dic = new dictionary();
 	
 	public Game() {
         initUI();
@@ -73,8 +72,8 @@ public class Game extends JFrame{
     	
     	tfAnswer = new JTextField();
     	tfTranslate = new JTextField();
-    	tfHir = new JTextField("hir",15);
-    	tfEng = new JTextField("eng",15);
+    	tfHir = new JTextField("test2",15);
+    	tfEng = new JTextField("test1",15);
 	 
     	taResult = new JTextArea("", 120, 600);
     	
@@ -135,7 +134,7 @@ public class Game extends JFrame{
     	frame.pack();
     	frame.setVisible(true);
         
-    	frame.setTitle("Hiragana Game");
+    	frame.setTitle("Vocabulary Game");
         frame.setSize(1000, 1000);
         frame.setLocationRelativeTo(null);
         
@@ -146,18 +145,27 @@ public class Game extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(rbHir.isSelected() || rbEng.isSelected()){
+					resetVars();
+					
 					hirText = tfHir.getText() + ".txt";
 					engText = tfEng.getText() + ".txt";
 					
-					if(rbHir.isSelected()) genArr(engText, hirText);
-					else genArr(hirText, engText);
+					if(rbHir.isSelected()) dic.loadDic(engText, hirText);
+					
+					else dic.loadDic(hirText, engText);
+					
 					tfAnswer.setEditable(true);
 					btnSubmit.setEnabled(true);
 					btnStart.setEnabled(false);
 					btnRestart.setEnabled(true);
 					tfHir.setEnabled(false);
 					tfEng.setEnabled(false);
-					genRandomString();
+					
+					taResult.append("Size of arr: " + dic.dic.size());
+					
+					randomString = dic.genRandomString();
+					
+					tfTranslate.setText(randomString);
 						
 				}
 			}
@@ -168,6 +176,10 @@ public class Game extends JFrame{
         btnRestart.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				dic.dic.clear();
+				dic.max = 0;
+				resetVars();
+		    	
 				arrHir.clear();
 				arrEng.clear();
 				tfAnswer.setEditable(false);
@@ -176,19 +188,14 @@ public class Game extends JFrame{
 				btnRestart.setEnabled(false);
 				taResult.setText(null);
 				
-				tfAnswer.setEditable(true);
+				tfTranslate.setText("");
+				tfAnswer.setEditable(false);
 
 				tfHir.setEnabled(true);
 				tfEng.setEnabled(true);
 				
 				btnCorr.setBackground(Color.GRAY);
-				
-				nrOfCorr = 0;
-		    	nrDone = 0;
-				
-		    	lblResult.setText("Your score : " + nrOfCorr + "/" + size + "  Done: " + nrDone);
-		    	
-				for(int i = 0; i < ifDone.length; i++) ifDone[i] = true;
+				lblResult.setText("Your score : " + nrOfCorr + "/" + size + "  Done: " + nrOfDone);
 			}
         	
         });
@@ -197,115 +204,67 @@ public class Game extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-					
+				// TODO Auto-generated method stub
 				if(!tfAnswer.getText().equals("")){
-					nrDone++;
-					String line = tfAnswer.getText().trim().toLowerCase();
-					if(line.equals(arrEng.get(randomNr))){
+					taResult.append("\n");
+					taResult.append("remaining: " + (dic.dic.size() - 1 - nrOfDone));
+					taResult.append("\n");
+					
+					String tr = tfTranslate.getText().trim().toLowerCase();
+					String ans = tfAnswer.getText().trim().toLowerCase();
+					System.out.println(dic.getCorresponding(tr) + " = " + ans);
+					nrOfDone++;
+					if(dic.getCorresponding(tr).equals(ans)){
 						nrOfCorr++;
-						taResult.append(line + " is CORRECT!         " + arrEng.get(randomNr) + " = " + arrHir.get(randomNr));
+						taResult.append(ans + " is CORRECT!         " + ans + " = " + tr);
 						btnCorr.setBackground(Color.GREEN);
-					}else {
+					}else{
 						nrOfWrong++;
-						arrEngWrong.add(arrEng.get(randomNr));
-						arrHirWrong.add(arrHir.get(randomNr));
-						taResult.append(line + " is WRONG!         " + arrEng.get(randomNr) + " = " + arrHir.get(randomNr));
+						arrHirWrong.add(dic.getCorresponding(tr));
+						arrEngWrong.add(tr);
+						taResult.append(ans + " is WRONG!         " + dic.getCorresponding(tr) + " = " + tr);
 				    	btnCorr.setBackground(Color.RED);
 					}
 					
-					taResult.append("\n");
-					taResult.append(nrOfCorr + " / " + nrDone);
-					ifDone[randomNr] = false;
-					tfAnswer.setText("");
-					taResult.append("\n");
-					lblResult.setText("Your score : " + nrOfCorr + "/" + size + "  Done: " + nrDone);
-					tfAnswer.requestFocus();
-					genRandomString();
+					if(nrOfCorr == nrOfDone && nrOfDone == dic.dic.size()){
+						resetVars();
+						JOptionPane.showMessageDialog(null, "Well done, Lesson finished!");
+						taResult.setText("You need to restart the game!!");
+					}else if(nrOfCorr < nrOfDone && nrOfDone == dic.dic.size()){
+						resetVars();
+						System.out.println("You have some wrong..");
+						int reply = JOptionPane.showConfirmDialog(null, "wanna try again?", "", JOptionPane.YES_NO_OPTION);
+				        if (reply == JOptionPane.YES_OPTION) {
+				            dic.addWrong(arrHirWrong, arrEngWrong);
+				            
+				            tfTranslate.setText(dic.genRandomString());
+				        }
+				        else {
+				        	taResult.setText("You need to restart the game!!");
+				        }
+					}else{
+						tfTranslate.setText(dic.genRandomString());
+						tfAnswer.setText("");
+						tfAnswer.requestFocus();
+					}
+					
+					
 				}
+				
+				
 			}
+        	
         });
-
-    }
-	/*Very wierd done, but it works for now..*/
-    protected void genArr(String from, String to) {
-    	int k = 0; 
-		try{
-			BufferedReader brIn = new BufferedReader(new FileReader(from));
-			String line = "";
-			k = 0;
-			while((line = brIn.readLine()) != null){
-				if(!line.equals("")){
-					line = line.trim();
-					arrHir.add(line);
-					k++;	
-				}
-			}
-			size = k;
-			max = size - 1; 
-			ifDone = new boolean[size];
-			for(int i = 0; i < ifDone.length; i++) ifDone[i] = true;
-	    	
-		}catch(IOException e) {
-			System.out.println(e);
-		}
-		try{
-			BufferedReader brIn = new BufferedReader(new FileReader(to));
-			String line = "";
-			k = 0;
-			while((line = brIn.readLine()) != null){
-				if(!line.equals("")){
-					line = line.trim();
-					arrEng.add(line);
-					k++;
-				}
-			}
-		}catch(IOException e) {
-			System.out.println(e);
-		}
-		
-    		
-    }		
-
-	protected void genRandomString() {
-    	randomNr = genRandomNr();
-    	boolean done = true;
-    	int k = 0;
-    	while(!ifDone[randomNr]) {
-    		k++;
-    		randomNr = genRandomNr();
-    		if(k > size * 3) {
-    			done = false;
-    			break;
-    		}
-    	}
-    	if(!done){
-    		int c = 0;
-    		boolean end = true;
-    		while(!ifDone[randomNr]){
-    			c++;
-    			randomNr = c;
-    			if(randomNr == size) {
-    				end = false; 
-    				break;
-    			}
-    		}
-    		if(end){	
-    			randomString = arrHir.get(randomNr);
-            	tfTranslate.setText(randomString);	
-    		} else allDone();
-    	}else {
-			randomString = arrHir.get(randomNr);
-        	tfTranslate.setText(randomString);	
-    	}
-    }
-    
-    protected int genRandomNr(){
-    	return random.nextInt(max - min + 1) + min;
-    }
-    
-    protected void allDone(){
+	}
+	protected void resetVars(){
+		nrOfCorr = 0;
+		nrOfDone = 0;
+		nrOfWrong = 0;
+	}
+	  
+      /*protected void allDone(){
     	nrOfCorr = 0;
-    	nrDone = 0;
+    	nrOfDone = 0;
     	btnSubmit.setEnabled(false);
     	arrHir.clear();
 		arrEng.clear();
@@ -319,17 +278,19 @@ public class Game extends JFrame{
     	else{
     		taResult.setText("Number of wrong: " + temp + "\n");
     		taResult.append("Your wrong answers: \n");
-	    	for(int i = 0; i < temp; i++){
-	    		taResult.append(arrEngWrong.get(i) + " = " + arrHirWrong.get(i) + "\n");
-	    		arrHir.add(arrHirWrong.get(i));
-	    		arrEng.add(arrEngWrong.get(i));
-	    		ifDone[i] = true;
-	    		btnSubmit.setEnabled(true);
-	    	}
+    		dic.dic.clear();
+    		dic.max = 0;
+    		
+    		dic.addWrong(arrEngWrong, arrHirWrong);
+    		
+	    	taResult.append("Size of arr: " + dic.dic.size() + "\n");
 	    	int reply = JOptionPane.showConfirmDialog(null, "Do you want to redo the wrong entries?", "Ones more", JOptionPane.YES_NO_OPTION);
 	        if (reply == JOptionPane.YES_OPTION) {
 	        	taResult.append("Redooing \n");
-	        	genRandomString();
+	        	String randomString = dic.genRandomString();
+	        	tfTranslate.setText(randomString);
+	        	btnSubmit.setEnabled(true);
+	        	
 	        }
 	        else {
 	        	tfAnswer.setEditable(false);
@@ -339,7 +300,7 @@ public class Game extends JFrame{
     	}
     }
     
-
+*/
 	public static void main(String[] args) {
     	Game ex = new Game();
     }
