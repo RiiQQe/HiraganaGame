@@ -149,7 +149,6 @@ public class Game extends JFrame{
 					hirText = tfHir.getText() + ".txt";
 					engText = tfEng.getText() + ".txt";
 					
-					
 					if(rbHir.isSelected()) genArr(engText, hirText);
 					else genArr(hirText, engText);
 					tfAnswer.setEditable(true);
@@ -305,7 +304,6 @@ public class Game extends JFrame{
     }
     
     protected void allDone(){
-    	//JOptionPane.showMessageDialog(null, "Result : " + nrOfCorr + "/" + size );
     	nrOfCorr = 0;
     	nrDone = 0;
     	btnSubmit.setEnabled(false);
