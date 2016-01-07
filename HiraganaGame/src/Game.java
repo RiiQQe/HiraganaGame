@@ -15,7 +15,7 @@ public class Game extends JFrame{
 	private JButton btnSubmit, btnStart, btnRestart, btnCorr;
 	private JTextField tfAnswer, tfTranslate, tfEng, tfHir;
 	
-	private JTextArea taResult, taWrongs;
+	private JTextArea taResult;
 	
 	String hirText, engText;
 	
@@ -33,13 +33,9 @@ public class Game extends JFrame{
 	int size;
 	int nrOfWrong = 0;
 	
-	private LinkedList<String> arrEng = new LinkedList<String>();
-	private LinkedList<String> arrHir = new LinkedList<String>();
-	
 	private LinkedList<String> arrEngWrong = new LinkedList<String>();
 	private LinkedList<String> arrHirWrong = new LinkedList<String>();
 	
-	private int randomNr; 
 	int nrOfCorr, min = 0, max; 
 	int nrOfDone = 0;
 	boolean[] ifDone;
@@ -108,11 +104,10 @@ public class Game extends JFrame{
     	panel2.add(btnStart);
     	panel2.add(btnRestart);
     	panel2.add(lblAllResults);
-    	//panel2.add(btnCorr);
+    	
     	panel2.add(tfEng);
     	panel2.add(tfHir);
     	
-		//panel.add(btnStart);
     	panel.add(lblTranslate);
     	panel.add(tfTranslate);
     	
@@ -166,11 +161,8 @@ public class Game extends JFrame{
 					randomString = dic.genRandomString();
 					
 					tfTranslate.setText(randomString);
-						
 				}
 			}
-
-        	
         });
         
         btnRestart.addActionListener(new ActionListener(){
@@ -180,8 +172,6 @@ public class Game extends JFrame{
 				dic.max = 0;
 				resetVars();
 		    	
-				arrHir.clear();
-				arrEng.clear();
 				tfAnswer.setEditable(false);
 				btnSubmit.setEnabled(false);
 				btnStart.setEnabled(true);
@@ -212,7 +202,7 @@ public class Game extends JFrame{
 					
 					String tr = tfTranslate.getText().trim().toLowerCase();
 					String ans = tfAnswer.getText().trim().toLowerCase();
-					System.out.println(dic.getCorresponding(tr) + " = " + ans);
+					
 					nrOfDone++;
 					if(dic.getCorresponding(tr).equals(ans)){
 						nrOfCorr++;
@@ -231,10 +221,11 @@ public class Game extends JFrame{
 						JOptionPane.showMessageDialog(null, "Well done, Lesson finished!");
 						taResult.setText("You need to restart the game!!");
 					}else if(nrOfCorr < nrOfDone && nrOfDone == dic.dic.size()){
+						
+						int reply = JOptionPane.showConfirmDialog(null, "Wanna try your misses again?", nrOfWrong + "/" + dic.dic.size(), JOptionPane.YES_NO_OPTION);
 						resetVars();
-						System.out.println("You have some wrong..");
-						int reply = JOptionPane.showConfirmDialog(null, "wanna try again?", "", JOptionPane.YES_NO_OPTION);
-				        if (reply == JOptionPane.YES_OPTION) {
+						tfAnswer.setText("");
+						if (reply == JOptionPane.YES_OPTION) {
 				            dic.addWrong(arrHirWrong, arrEngWrong);
 				            
 				            tfTranslate.setText(dic.genRandomString());
@@ -247,13 +238,8 @@ public class Game extends JFrame{
 						tfAnswer.setText("");
 						tfAnswer.requestFocus();
 					}
-					
-					
 				}
-				
-				
 			}
-        	
         });
 	}
 	protected void resetVars(){
@@ -262,45 +248,6 @@ public class Game extends JFrame{
 		nrOfWrong = 0;
 	}
 	  
-      /*protected void allDone(){
-    	nrOfCorr = 0;
-    	nrOfDone = 0;
-    	btnSubmit.setEnabled(false);
-    	arrHir.clear();
-		arrEng.clear();
-		int temp = nrOfWrong;
-		nrOfWrong = 0;
-    	if(temp == 0) {
-    		JOptionPane.showMessageDialog(null, "Well done, Lesson finished!");
-    	    taResult.append("YOU NEED TO RESTART THE GAME");
-    	    tfAnswer.setEditable(false);
-    	}
-    	else{
-    		taResult.setText("Number of wrong: " + temp + "\n");
-    		taResult.append("Your wrong answers: \n");
-    		dic.dic.clear();
-    		dic.max = 0;
-    		
-    		dic.addWrong(arrEngWrong, arrHirWrong);
-    		
-	    	taResult.append("Size of arr: " + dic.dic.size() + "\n");
-	    	int reply = JOptionPane.showConfirmDialog(null, "Do you want to redo the wrong entries?", "Ones more", JOptionPane.YES_NO_OPTION);
-	        if (reply == JOptionPane.YES_OPTION) {
-	        	taResult.append("Redooing \n");
-	        	String randomString = dic.genRandomString();
-	        	tfTranslate.setText(randomString);
-	        	btnSubmit.setEnabled(true);
-	        	
-	        }
-	        else {
-	        	tfAnswer.setEditable(false);
-	        	btnSubmit.setEnabled(false);
-	    	    taResult.append("YOU NEED TO RESTART THE GAME");
-	        }
-    	}
-    }
-    
-*/
 	public static void main(String[] args) {
     	Game ex = new Game();
     }
