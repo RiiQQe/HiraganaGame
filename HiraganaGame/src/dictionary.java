@@ -51,9 +51,7 @@ public class dictionary {
 		
 		int k = 0;
 		dic.clear();
-		System.out.println("Words u got wrong: (" + from.size() +")(" + to.size() + ")");
 		while(k < from.size() && k < to.size()){
-			System.out.println(from.get(k) + " = " + to.get(k));
 			word w = new word(from.get(k), to.get(k), false);
 			dic.add(w);
 			k++;

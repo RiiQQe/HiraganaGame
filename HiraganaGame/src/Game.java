@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import javax.swing.*;
@@ -57,6 +58,9 @@ public class Game extends JFrame{
 	final JFrame frame = new JFrame();
 	final JPanel panel = new JPanel();
 	
+	private Color[] colors = new Color[3];
+	private float result;
+	
 	private dictionary dic = new dictionary();
 	
 	private String pathToLogo = "Logo.png";
@@ -67,6 +71,10 @@ public class Game extends JFrame{
 
     
 	private void initUI() {
+		
+		colors[0] = Color.RED;
+		colors[1] = Color.ORANGE;
+		colors[2] = Color.GREEN;
 		
 		ImageIcon logo = new ImageIcon(pathToLogo);
 		
@@ -92,8 +100,8 @@ public class Game extends JFrame{
     	
     	tfAnswer = new JTextField();
     	tfTranslate = new JTextField();
-    	tfHir = new JTextField("kap7eng",15);
-    	tfEng = new JTextField("kap7hir",15);
+    	tfHir = new JTextField("kap9eng",15);
+    	tfEng = new JTextField("kap9hir",15);
 	 
     	taResult = new JTextArea("", 120, 600);
     	
@@ -262,7 +270,7 @@ public class Game extends JFrame{
 						arrHirWrong.add(dic.getCorresponding(tr));
 						arrEngWrong.add(tr);
 						taResult.append(ans + " is WRONG!         " + dic.getCorresponding(tr) + " = " + tr + "\n");
-				    	btnCorr.setBackground(Color.RED);
+						btnCorr.setBackground(Color.RED);
 					}
 					
 					taResult.append("NrOfWrong: " + nrOfWrong + "\n");
@@ -272,8 +280,9 @@ public class Game extends JFrame{
 						JOptionPane.showMessageDialog(null,"Well done, Lesson finished!");
 						taResult.setText("You need to restart the game!!");
 					}else if(nrOfCorr < nrOfDone && nrOfDone == dic.dic.size()){
-						
-						int reply = JOptionPane.showConfirmDialog(null, "Wanna try your misses again?", nrOfWrong + "/" + dic.dic.size(), JOptionPane.YES_NO_OPTION);
+						Color c = getColor();
+						btnCorr.setBackground(c);
+						int reply = JOptionPane.showConfirmDialog(null, "Wanna try your misses again? Percentage corr: " + result * 100 + "%", nrOfWrong + "/" + dic.dic.size(), JOptionPane.YES_NO_OPTION);
 						resetVars();
 						tfAnswer.setText("");
 						if (reply == JOptionPane.YES_OPTION) {
@@ -347,6 +356,20 @@ public class Game extends JFrame{
         	
         });
 	}
+	
+	public Color getColor(){
+		
+		if(nrOfDone == 0) return Color.GRAY;
+		result = (float)nrOfCorr / nrOfDone;
+		result = Float.parseFloat(new DecimalFormat("##.##").format(result).replace(",", "."));
+	
+		if(result < 0.33) return Color.RED;
+		if(result >= 0.33 && result <= 0.66) return Color.ORANGE;
+		if(result > 0.66) return Color.GREEN;
+		
+		return Color.GRAY;
+	}
+	
 	public static void openWebpage(URI uri) {
 	    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
 	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
