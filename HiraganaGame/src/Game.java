@@ -24,7 +24,7 @@ public class Game extends JFrame{
 	
 	String hirText, engText;
 	
-	private JLabel lblAnswer, lblTranslate, lblResult, lblStart, lblAllResults, lblMine;
+	private JLabel lblAnswer, lblTranslate, lblStart, lblAllResults, lblMine;
 	
 	private JRadioButton rbHir, rbEng;
 	
@@ -92,7 +92,6 @@ public class Game extends JFrame{
     	
     	lblAnswer = new JLabel("Put your answer here:");
     	lblTranslate = new JLabel("Translate this: ");
-    	lblResult = new JLabel("Right / Wrong");
     	lblStart = new JLabel("Choose hir-eng or eng-hir");
     	lblMine = new JLabel("Creator: Rickard Lindstedt");
     	
@@ -199,7 +198,7 @@ public class Game extends JFrame{
 				tfEng.setEnabled(true);
 				
 				btnCorr.setBackground(Color.GRAY);
-				lblResult.setText("Your score : " + nrOfCorr + "/" + size + "  Done: " + nrOfDone);
+				
 			}
         	
         });
