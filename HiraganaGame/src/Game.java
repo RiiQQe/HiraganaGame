@@ -38,7 +38,7 @@ public class Game extends JFrame{
 	private JPanel panel2 = new JPanel();
 	private JPanel panel3 = new JPanel();
 	
-	private boolean kalle; // denna ska bort, fullösning för nu
+	private boolean filesFound; 
 	
 	int size;
 	int nrOfWrong = 0;
@@ -179,23 +179,33 @@ public class Game extends JFrame{
 					hirText = hirText + ".txt";
 					engText = engText + ".txt";
 					
-					if(rbHir.isSelected()) dic.loadDic(engText, hirText);
+					if(rbHir.isSelected()) 
+						if(!dic.loadDic(engText, hirText)){
+							JOptionPane.showMessageDialog(null, "Couldn't find the files");
+							filesFound = false;
+						}else filesFound = true;
 					
-					else dic.loadDic(hirText, engText);
-					
-					btnFileChooser.setEnabled(false);
-					tfAnswer.setEditable(true);
-					btnSubmit.setEnabled(true);
-					btnStart.setEnabled(false);
-					btnRestart.setEnabled(true);
-					tfHir.setEnabled(false);
-					tfEng.setEnabled(false);
-					
-					taResult.append("Size of arr: " + dic.dic.size());
-					
-					randomString = dic.genRandomString();
-					
-					tfTranslate.setText(randomString);
+					else {
+						if(!dic.loadDic(hirText, engText)){
+							JOptionPane.showMessageDialog(null, "Couldn't find the files");
+							filesFound = false;
+						}else filesFound = true;
+					}
+					if(filesFound){
+						btnFileChooser.setEnabled(false);
+						tfAnswer.setEditable(true);
+						btnSubmit.setEnabled(true);
+						btnStart.setEnabled(false);
+						btnRestart.setEnabled(true);
+						tfHir.setEnabled(false);
+						tfEng.setEnabled(false);
+						
+						taResult.append("Size of arr: " + dic.dic.size());
+						
+						randomString = dic.genRandomString();
+						
+						tfTranslate.setText(randomString);
+					}
 				}else{
 					JOptionPane.showMessageDialog(null, "Please check one of the above radiobuttons");
 				}
@@ -347,7 +357,6 @@ public class Game extends JFrame{
 	    }
 	}
 	protected void resetVars(){
-		System.out.println("Resetar values");
 		nrOfCorr = 0;
 		nrOfDone = 0;
 		nrOfWrong = 0;

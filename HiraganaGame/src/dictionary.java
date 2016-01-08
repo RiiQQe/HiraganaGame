@@ -20,7 +20,7 @@ public class dictionary {
 	
 	private Random random = new Random();
 	
-	public void loadDic(String from, String to){
+	public boolean loadDic(String from, String to){
 		dic.clear();
 		try{
 			BufferedReader brInFrom = new BufferedReader(new FileReader(from));
@@ -37,10 +37,12 @@ public class dictionary {
 			max = k - 1;
 			brInFrom.close();
 			brInTo.close();
+			return true;
 			
 			
 		}catch(IOException e2){
 			System.out.println(e2);
+			return false;
 		}
 		
 	}
@@ -81,7 +83,7 @@ public class dictionary {
 			randomString = dic.get(k).lang2;
 			dic.get(k).setUsed(true);
 		}
-		System.out.println("English: " + randomString);
+		
     	return randomString;
     	
     }
