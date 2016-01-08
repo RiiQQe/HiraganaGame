@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,12 +18,14 @@ import javax.swing.*;
 
 public class Game extends JFrame{
 
-	private JButton btnSubmit, btnStart, btnRestart, btnCorr, btnMine;
+	private JButton btnSubmit, btnStart, btnRestart, btnCorr, btnMine, btnFileChooser;
 	private JTextField tfAnswer, tfTranslate, tfEng, tfHir;
 	
 	private JTextArea taResult;
 	
 	String hirText, engText;
+	
+	File fromFile, toFile;
 	
 	private JLabel lblAnswer, lblTranslate, lblStart, lblAllResults, lblMine;
 	
@@ -72,6 +75,7 @@ public class Game extends JFrame{
     	btnStart = new JButton("Start Game");
     	btnRestart = new JButton("Restart Game");
     	btnMine = new JButton("Go to my website!");
+    	btnFileChooser = new JButton("Choose files");
     	
     	btnMine.setBorderPainted(false);
     	btnMine.setFocusPainted(false);
@@ -100,8 +104,6 @@ public class Game extends JFrame{
     	lblStart = new JLabel("Choose hir-eng or eng-hir");
     	lblMine = new JLabel("Creator: Rickard Lindstedt");
     	
-    	lblAllResults = new JLabel("");
-    	
     	frame.setIconImage(logo.getImage());
     	
     	bg.add(rbEng);
@@ -122,10 +124,13 @@ public class Game extends JFrame{
     	panel2.add(lblStart);
     	panel2.add(btnStart);
     	panel2.add(btnRestart);
-    	panel2.add(lblAllResults);
+    	
     	
     	panel2.add(tfEng);
     	panel2.add(tfHir);
+    	
+    	panel2.add(btnFileChooser);
+    	
     	
     	panel.add(lblTranslate);
     	panel.add(tfTranslate);
@@ -162,8 +167,16 @@ public class Game extends JFrame{
 				if(rbHir.isSelected() || rbEng.isSelected()){
 					resetVars();
 					
-					hirText = tfHir.getText() + ".txt";
-					engText = tfEng.getText() + ".txt";
+					
+					
+					hirText = tfHir.getText();// + ".txt";
+					engText = tfEng.getText();// + ".txt";
+					
+					hirText = hirText.replace(".txt", "");
+					engText = engText.replace(".txt", "");
+					
+					hirText = hirText + ".txt";
+					engText = engText + ".txt";
 					
 					if(rbHir.isSelected()) dic.loadDic(engText, hirText);
 					
@@ -181,6 +194,8 @@ public class Game extends JFrame{
 					randomString = dic.genRandomString();
 					
 					tfTranslate.setText(randomString);
+				}else{
+					JOptionPane.showMessageDialog(null, "Please check one of the above radiobuttons");
 				}
 			}
         });
@@ -260,6 +275,39 @@ public class Game extends JFrame{
 					}
 				}
 			}
+        });
+        
+        btnFileChooser.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				final JFileChooser fc = new JFileChooser();
+				fc.setDialogTitle("Choose file to translate from");
+				int returnVal = fc.showOpenDialog(Game.this);
+				
+				
+				if(returnVal == JFileChooser.APPROVE_OPTION){
+					toFile = fc.getSelectedFile();
+					
+					tfHir.setText(toFile.getName().replace(".txt", ""));
+				}
+				
+				returnVal = fc.showOpenDialog(Game.this);
+				fc.setDialogTitle("Choose file with the translations");
+				
+				if(returnVal == JFileChooser.APPROVE_OPTION){
+					fromFile = fc.getSelectedFile();
+					tfEng.setText(fromFile.getName().replace(".txt", ""));
+				}
+				
+				
+			
+				
+				
+			}
+        	
         });
         
         
