@@ -38,6 +38,8 @@ public class Game extends JFrame{
 	private JPanel panel2 = new JPanel();
 	private JPanel panel3 = new JPanel();
 	
+	private boolean kalle; // denna ska bort, fullösning för nu
+	
 	int size;
 	int nrOfWrong = 0;
 	
@@ -90,8 +92,8 @@ public class Game extends JFrame{
     	
     	tfAnswer = new JTextField();
     	tfTranslate = new JTextField();
-    	tfHir = new JTextField("test2",15);
-    	tfEng = new JTextField("test1",15);
+    	tfHir = new JTextField("kap7eng",15);
+    	tfEng = new JTextField("kap7hir",15);
 	 
     	taResult = new JTextArea("", 120, 600);
     	
@@ -165,12 +167,11 @@ public class Game extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(rbHir.isSelected() || rbEng.isSelected()){
+					
 					resetVars();
 					
-					
-					
-					hirText = tfHir.getText();// + ".txt";
-					engText = tfEng.getText();// + ".txt";
+					hirText = tfHir.getText();
+					engText = tfEng.getText();
 					
 					hirText = hirText.replace(".txt", "");
 					engText = engText.replace(".txt", "");
@@ -182,6 +183,7 @@ public class Game extends JFrame{
 					
 					else dic.loadDic(hirText, engText);
 					
+					btnFileChooser.setEnabled(false);
 					tfAnswer.setEditable(true);
 					btnSubmit.setEnabled(true);
 					btnStart.setEnabled(false);
@@ -207,6 +209,7 @@ public class Game extends JFrame{
 				dic.max = 0;
 				resetVars();
 		    	
+				btnFileChooser.setEnabled(true);
 				tfAnswer.setEditable(false);
 				btnSubmit.setEnabled(false);
 				btnStart.setEnabled(true);
@@ -241,15 +244,17 @@ public class Game extends JFrame{
 					nrOfDone++;
 					if(dic.getCorresponding(tr).equals(ans)){
 						nrOfCorr++;
-						taResult.append(ans + " is CORRECT!         " + ans + " = " + tr);
+						taResult.append(ans + " is CORRECT!         " + ans + " = " + tr + "\n");
 						btnCorr.setBackground(Color.GREEN);
 					}else{
 						nrOfWrong++;
 						arrHirWrong.add(dic.getCorresponding(tr));
 						arrEngWrong.add(tr);
-						taResult.append(ans + " is WRONG!         " + dic.getCorresponding(tr) + " = " + tr);
+						taResult.append(ans + " is WRONG!         " + dic.getCorresponding(tr) + " = " + tr + "\n");
 				    	btnCorr.setBackground(Color.RED);
 					}
+					
+					taResult.append("NrOfWrong: " + nrOfWrong + "\n");
 					
 					if(nrOfCorr == nrOfDone && nrOfDone == dic.dic.size()){
 						resetVars();
@@ -262,7 +267,8 @@ public class Game extends JFrame{
 						tfAnswer.setText("");
 						if (reply == JOptionPane.YES_OPTION) {
 				            dic.addWrong(arrHirWrong, arrEngWrong);
-				            
+				            arrHirWrong.clear();
+				            arrEngWrong.clear();
 				            tfTranslate.setText(dic.genRandomString());
 				        }
 				        else {
@@ -341,6 +347,7 @@ public class Game extends JFrame{
 	    }
 	}
 	protected void resetVars(){
+		System.out.println("Resetar values");
 		nrOfCorr = 0;
 		nrOfDone = 0;
 		nrOfWrong = 0;

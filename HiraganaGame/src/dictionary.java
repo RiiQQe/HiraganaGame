@@ -15,14 +15,10 @@ public class dictionary {
 	
 	public boolean[] ifDone;
 	
-	
-	
 	private int randomNr;
 	private String randomString;
 	
 	private Random random = new Random();
-	
-	
 	
 	public void loadDic(String from, String to){
 		dic.clear();
@@ -32,6 +28,8 @@ public class dictionary {
 			int k = 0;
 			String line = "", line2 = "";
 			while((line = brInFrom.readLine()) != null && (line2 = brInTo.readLine()) != null){
+				line = line.trim().toLowerCase();
+				line2 = line2.trim().toLowerCase();
 				word w = new word(line, line2, false);
 				dic.add(w);
 				k++;
@@ -51,11 +49,14 @@ public class dictionary {
 		
 		int k = 0;
 		dic.clear();
+		System.out.println("Words u got wrong: (" + from.size() +")(" + to.size() + ")");
 		while(k < from.size() && k < to.size()){
+			System.out.println(from.get(k) + " = " + to.get(k));
 			word w = new word(from.get(k), to.get(k), false);
 			dic.add(w);
 			k++;
 		}
+		max = k - 1;
 		
 	}
 	
@@ -80,7 +81,7 @@ public class dictionary {
 			randomString = dic.get(k).lang2;
 			dic.get(k).setUsed(true);
 		}
-		
+		System.out.println("English: " + randomString);
     	return randomString;
     	
     }
