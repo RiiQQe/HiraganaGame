@@ -54,12 +54,17 @@ public class Game extends JFrame{
 	
 	private dictionary dic = new dictionary();
 	
+	private String pathToLogo = "Logo.png";
+	
 	public Game() {
         initUI();
     }
 
     
 	private void initUI() {
+		
+		ImageIcon logo = new ImageIcon(pathToLogo);
+		
     	rbHir = new JRadioButton("Eng - Hir");
     	rbEng = new JRadioButton("Hir - Eng");
     	
@@ -96,6 +101,8 @@ public class Game extends JFrame{
     	lblMine = new JLabel("Creator: Rickard Lindstedt");
     	
     	lblAllResults = new JLabel("");
+    	
+    	frame.setIconImage(logo.getImage());
     	
     	bg.add(rbEng);
     	bg.add(rbHir);
@@ -193,7 +200,7 @@ public class Game extends JFrame{
 				
 				tfTranslate.setText("");
 				tfAnswer.setEditable(false);
-
+				tfAnswer.setText("");
 				tfHir.setEnabled(true);
 				tfEng.setEnabled(true);
 				
@@ -231,7 +238,7 @@ public class Game extends JFrame{
 					
 					if(nrOfCorr == nrOfDone && nrOfDone == dic.dic.size()){
 						resetVars();
-						JOptionPane.showMessageDialog(null, "Well done, Lesson finished!");
+						JOptionPane.showMessageDialog(null,"Well done, Lesson finished!");
 						taResult.setText("You need to restart the game!!");
 					}else if(nrOfCorr < nrOfDone && nrOfDone == dic.dic.size()){
 						
