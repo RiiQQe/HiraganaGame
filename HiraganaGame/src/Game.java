@@ -161,6 +161,7 @@ public class Game extends JFrame{
         frame.setLocationRelativeTo(null);
         
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.getRootPane().setDefaultButton(btnSubmit);
         
         btnStart.addActionListener(new ActionListener(){
 
