@@ -27,6 +27,7 @@ public class dictionary {
 			BufferedReader brInTo = new BufferedReader(new FileReader(to));
 			int k = 0;
 			String line = "", line2 = "";
+			
 			while((line = brInFrom.readLine()) != null && (line2 = brInTo.readLine()) != null){
 				line = line.trim().toLowerCase();
 				line2 = line2.trim().toLowerCase();

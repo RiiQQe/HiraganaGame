@@ -100,8 +100,8 @@ public class Game extends JFrame{
     	
     	tfAnswer = new JTextField();
     	tfTranslate = new JTextField();
-    	tfHir = new JTextField("kap9eng",15);
-    	tfEng = new JTextField("kap9hir",15);
+    	tfHir = new JTextField("KAPALLENG",15);
+    	tfEng = new JTextField("KAPALLHIR",15);
 	 
     	taResult = new JTextArea("", 120, 600);
     	
