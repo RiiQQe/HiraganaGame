@@ -4,6 +4,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,15 +19,12 @@ import java.util.*;
 import javax.swing.*;
 
 public class Game extends JFrame{
-
+	
+	/*GuiStuff*/
 	private JButton btnSubmit, btnStart, btnRestart, btnCorr, btnMine, btnFileChooser;
 	private JTextField tfAnswer, tfTranslate, tfFrom, tfTo;
 	
 	private JTextArea taResult;
-	
-	String toText, fromText;
-	
-	File fromFile, toFile;
 	
 	private JLabel lblAnswer, lblTranslate, lblStart, lblAllResults, lblMine;
 	
@@ -38,8 +36,20 @@ public class Game extends JFrame{
 	
 	private JPanel panel2 = new JPanel();
 	private JPanel panel3 = new JPanel();
+
+	private final JFrame frame = new JFrame();
+	private final JPanel panel = new JPanel();
 	
+	private JMenuBar menuBar;
+	private JMenu menu;
+	private JMenuItem menuItem;
+	
+	/*Vars*/
 	private boolean filesFound; 
+	
+	private String toText, fromText;
+	
+	private File fromFile, toFile;
 	
 	int size;
 	int nrOfWrong = 0;
@@ -55,10 +65,6 @@ public class Game extends JFrame{
 	
 	private String randomString = "";
 	
-	final JFrame frame = new JFrame();
-	final JPanel panel = new JPanel();
-	
-	private Color[] colors = new Color[3];
 	private float result;
 	
 	private dictionary dic = new dictionary();
@@ -74,6 +80,23 @@ public class Game extends JFrame{
     
 	private void initUI() {
 		ImageIcon logo = new ImageIcon(pathToLogo);
+		
+		menuBar = new JMenuBar();
+		
+		menu = new JMenu("Info");
+		menu.setMnemonic(KeyEvent.VK_A);
+		menu.getAccessibleContext().setAccessibleDescription(
+		        "The only menu in this program that has menu items");
+		
+		menuBar.add(menu);
+		//a group of JMenuItems
+		menuItem = new JMenuItem("How to use",
+		                         KeyEvent.VK_T);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_1, ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription(
+		        "This doesn't really do anything");
+		menu.add(menuItem);
 		
     	rbTo = new JRadioButton("from - to");
     	rbFrom = new JRadioButton("to - from");
@@ -163,11 +186,14 @@ public class Game extends JFrame{
     	frame.setVisible(true);
         
     	frame.setTitle("Vocabulary Game");
-        frame.setSize(1000, 1000);
+        frame.setSize(1000, 900);
+        
         frame.setLocationRelativeTo(null);
         
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.getRootPane().setDefaultButton(btnStart);
+        
+        frame.setJMenuBar(menuBar);
         
         btnStart.addActionListener(new ActionListener(){
 
@@ -186,8 +212,6 @@ public class Game extends JFrame{
 						toText = toText + ".txt";
 						fromText = fromText + ".txt";
 					}
-					
-					System.out.println("filepath: " + toText);
 					
 					if(rbTo.isSelected()) 
 						if(!dic.loadDic(fromText, toText)){
@@ -346,7 +370,21 @@ public class Game extends JFrame{
 			}
         	
         });
+        
+        menuItem.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "This is how you use it...");
+				System.out.println("hesjan");
+				
+			}
+        	
+        });
+        
 	}
+	
+	
 	
 	public void restart(){
 		dic.dic.clear();
