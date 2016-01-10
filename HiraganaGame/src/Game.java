@@ -211,7 +211,7 @@ public class Game extends JFrame{
 				if(rbTo.isSelected() || rbFrom.isSelected()){
 					
 					resetVars();
-					if(!fileChoosen){
+					if(!fileChoosen && rbTxt.isSelected()){
 						toText = tfTo.getText();
 						fromText = tfFrom.getText();
 						
@@ -221,6 +221,12 @@ public class Game extends JFrame{
 						toText = toText + ".txt";
 						fromText = fromText + ".txt";
 					}
+					if(rbCSV.isSelected()){
+						fromCSV = tfFrom.getText();
+						fromCSV = fromCSV.replace(".csv", "");
+						fromCSV = fromCSV + ".csv";
+					}
+					System.out.println(toCSV);
 					
 					if(rbTo.isSelected() && rbTxt.isSelected()){
 						if(!dic.loadDicFromTxt(fromText, toText)){

@@ -50,7 +50,7 @@ public class dictionary {
 	
 	public boolean loadDicFromCSV(String from, String to){
 		dic.clear();
-		from = "TEST.csv";
+		System.out.println("FROM: " + from);
 		try{
 			BufferedReader brInFrom = new BufferedReader(new FileReader(from));
 			
