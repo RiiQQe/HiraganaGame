@@ -20,17 +20,17 @@ import javax.swing.*;
 public class Game extends JFrame{
 
 	private JButton btnSubmit, btnStart, btnRestart, btnCorr, btnMine, btnFileChooser;
-	private JTextField tfAnswer, tfTranslate, tfEng, tfHir;
+	private JTextField tfAnswer, tfTranslate, tfFrom, tfTo;
 	
 	private JTextArea taResult;
 	
-	String hirText, engText;
+	String toText, FromText;
 	
 	File fromFile, toFile;
 	
 	private JLabel lblAnswer, lblTranslate, lblStart, lblAllResults, lblMine;
 	
-	private JRadioButton rbHir, rbEng;
+	private JRadioButton rbTo, rbFrom;
 	
 	private JScrollPane sp;
 	
@@ -44,8 +44,8 @@ public class Game extends JFrame{
 	int size;
 	int nrOfWrong = 0;
 	
-	private LinkedList<String> arrEngWrong = new LinkedList<String>();
-	private LinkedList<String> arrHirWrong = new LinkedList<String>();
+	private LinkedList<String> arrFromWrong = new LinkedList<String>();
+	private LinkedList<String> arrtoWrong = new LinkedList<String>();
 	
 	int nrOfCorr, min = 0, max; 
 	int nrOfDone = 0;
@@ -78,8 +78,8 @@ public class Game extends JFrame{
 		
 		ImageIcon logo = new ImageIcon(pathToLogo);
 		
-    	rbHir = new JRadioButton("Eng - Hir");
-    	rbEng = new JRadioButton("Hir - Eng");
+    	rbTo = new JRadioButton("from - to");
+    	rbFrom = new JRadioButton("to - from");
     	
     	btnSubmit = new JButton("Submit");
     	btnStart = new JButton("Start Game");
@@ -100,8 +100,8 @@ public class Game extends JFrame{
     	
     	tfAnswer = new JTextField();
     	tfTranslate = new JTextField();
-    	tfHir = new JTextField("kap7eng",15);
-    	tfEng = new JTextField("kap7hir",15);
+    	tfTo = new JTextField("kap7eng",15);
+    	tfFrom = new JTextField("kap7hir",15);
 	 
     	taResult = new JTextArea("", 120, 600);
     	
@@ -111,13 +111,15 @@ public class Game extends JFrame{
     	
     	lblAnswer = new JLabel("Put your answer here:");
     	lblTranslate = new JLabel("Translate this: ");
-    	lblStart = new JLabel("Choose hir-eng or eng-hir");
+    	lblStart = new JLabel("Choose to-from or from-to");
     	lblMine = new JLabel("Creator: Rickard Lindstedt");
     	
     	frame.setIconImage(logo.getImage());
     	
-    	bg.add(rbEng);
-    	bg.add(rbHir);
+    	rbTo.setSelected(true);
+    	
+    	bg.add(rbFrom);
+    	bg.add(rbTo);
     	
     	sp = new JScrollPane(taResult);
     	btnCorr = new JButton("CORR = GREEN, WRONG = RED");
@@ -129,15 +131,15 @@ public class Game extends JFrame{
 		frame.setLayout(new GridLayout(3,1));
 		/*THIS IS HOW IT WAS*/
     	panel2.add(btnStart);
-    	panel2.add(rbEng);
-    	panel2.add(rbHir);
+    	panel2.add(rbFrom);
+    	panel2.add(rbTo);
     	panel2.add(lblStart);
     	panel2.add(btnStart);
     	panel2.add(btnRestart);
     	
     	
-    	panel2.add(tfEng);
-    	panel2.add(tfHir);
+    	panel2.add(tfFrom);
+    	panel2.add(tfTo);
     	
     	panel2.add(btnFileChooser);
     	
@@ -175,27 +177,27 @@ public class Game extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(rbHir.isSelected() || rbEng.isSelected()){
+				if(rbTo.isSelected() || rbFrom.isSelected()){
 					
 					resetVars();
 					
-					hirText = tfHir.getText();
-					engText = tfEng.getText();
+					toText = tfTo.getText();
+					FromText = tfFrom.getText();
 					
-					hirText = hirText.replace(".txt", "");
-					engText = engText.replace(".txt", "");
+					toText = toText.replace(".txt", "");
+					FromText = FromText.replace(".txt", "");
 					
-					hirText = hirText + ".txt";
-					engText = engText + ".txt";
+					toText = toText + ".txt";
+					FromText = FromText + ".txt";
 					
-					if(rbHir.isSelected()) 
-						if(!dic.loadDic(engText, hirText)){
+					if(rbTo.isSelected()) 
+						if(!dic.loadDic(FromText, toText)){
 							JOptionPane.showMessageDialog(null, "Couldn't find the files");
 							filesFound = false;
 						}else filesFound = true;
 					
 					else {
-						if(!dic.loadDic(hirText, engText)){
+						if(!dic.loadDic(toText, FromText)){
 							JOptionPane.showMessageDialog(null, "Couldn't find the files");
 							filesFound = false;
 						}else filesFound = true;
@@ -208,8 +210,8 @@ public class Game extends JFrame{
 						btnSubmit.setEnabled(true);
 						btnStart.setEnabled(false);
 						btnRestart.setEnabled(true);
-						tfHir.setEnabled(false);
-						tfEng.setEnabled(false);
+						tfTo.setEnabled(false);
+						tfFrom.setEnabled(false);
 						
 						taResult.append("Size of arr: " + dic.dic.size());
 						
@@ -226,26 +228,7 @@ public class Game extends JFrame{
         btnRestart.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				dic.dic.clear();
-				dic.max = 0;
-				resetVars();
-				frame.getRootPane().setDefaultButton(btnStart);
-		    	
-				btnFileChooser.setEnabled(true);
-				tfAnswer.setEditable(false);
-				btnSubmit.setEnabled(false);
-				btnStart.setEnabled(true);
-				btnRestart.setEnabled(false);
-				taResult.setText(null);
-				
-				tfTranslate.setText("");
-				tfAnswer.setEditable(false);
-				tfAnswer.setText("");
-				tfHir.setEnabled(true);
-				tfEng.setEnabled(true);
-				
-				btnCorr.setBackground(Color.GRAY);
-				
+				restart();
 			}
         	
         });
@@ -270,8 +253,8 @@ public class Game extends JFrame{
 						btnCorr.setBackground(Color.GREEN);
 					}else{
 						nrOfWrong++;
-						arrHirWrong.add(dic.getCorresponding(tr));
-						arrEngWrong.add(tr);
+						arrtoWrong.add(dic.getCorresponding(tr));
+						arrFromWrong.add(tr);
 						taResult.append(ans + " is WRONG!         " + dic.getCorresponding(tr) + " = " + tr + "\n");
 						btnCorr.setBackground(Color.RED);
 					}
@@ -281,7 +264,7 @@ public class Game extends JFrame{
 					if(nrOfCorr == nrOfDone && nrOfDone == dic.dic.size()){
 						resetVars();
 						JOptionPane.showMessageDialog(null,"Well done, Lesson finished!");
-						taResult.setText("You need to restart the game!!");
+						restart();
 					}else if(nrOfCorr < nrOfDone && nrOfDone == dic.dic.size()){
 						Color c = getColor();
 						btnCorr.setBackground(c);
@@ -289,13 +272,13 @@ public class Game extends JFrame{
 						resetVars();
 						tfAnswer.setText("");
 						if (reply == JOptionPane.YES_OPTION) {
-				            dic.addWrong(arrHirWrong, arrEngWrong);
-				            arrHirWrong.clear();
-				            arrEngWrong.clear();
+				            dic.addWrong(arrtoWrong, arrFromWrong);
+				            arrtoWrong.clear();
+				            arrFromWrong.clear();
 				            tfTranslate.setText(dic.genRandomString());
 				        }
 				        else {
-				        	taResult.setText("You need to restart the game!!");
+				        	restart();
 				        }
 					}else{
 						tfTranslate.setText(dic.genRandomString());
@@ -320,7 +303,7 @@ public class Game extends JFrame{
 				if(returnVal == JFileChooser.APPROVE_OPTION){
 					toFile = fc.getSelectedFile();
 					
-					tfHir.setText(toFile.getName().replace(".txt", ""));
+					tfTo.setText(toFile.getName().replace(".txt", ""));
 				}
 				
 				returnVal = fc.showOpenDialog(Game.this);
@@ -328,7 +311,7 @@ public class Game extends JFrame{
 				
 				if(returnVal == JFileChooser.APPROVE_OPTION){
 					fromFile = fc.getSelectedFile();
-					tfEng.setText(fromFile.getName().replace(".txt", ""));
+					tfFrom.setText(fromFile.getName().replace(".txt", ""));
 				}
 				
 				
@@ -358,6 +341,31 @@ public class Game extends JFrame{
 			}
         	
         });
+	}
+	
+	public void restart(){
+		dic.dic.clear();
+		dic.max = 0;
+		resetVars();
+		frame.getRootPane().setDefaultButton(btnStart);
+    	
+		btnFileChooser.setEnabled(true);
+		tfAnswer.setEditable(false);
+		btnSubmit.setEnabled(false);
+		btnStart.setEnabled(true);
+		btnRestart.setEnabled(false);
+		taResult.setText(null);
+		
+		tfTranslate.setText("");
+		tfAnswer.setEditable(false);
+		tfAnswer.setText("");
+		tfTo.setEnabled(true);
+		tfFrom.setEnabled(true);
+		
+		btnCorr.setBackground(Color.GRAY);
+		
+		tfFrom.requestFocus();
+		
 	}
 	
 	public Color getColor(){
