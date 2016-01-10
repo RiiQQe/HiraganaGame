@@ -100,8 +100,8 @@ public class Game extends JFrame{
     	
     	tfAnswer = new JTextField();
     	tfTranslate = new JTextField();
-    	tfHir = new JTextField("KAPALLENG",15);
-    	tfEng = new JTextField("KAPALLHIR",15);
+    	tfHir = new JTextField("kap11eng",15);
+    	tfEng = new JTextField("kap11hir",15);
 	 
     	taResult = new JTextArea("", 120, 600);
     	
@@ -141,7 +141,6 @@ public class Game extends JFrame{
     	
     	panel2.add(btnFileChooser);
     	
-    	
     	panel.add(lblTranslate);
     	panel.add(tfTranslate);
     	
@@ -169,7 +168,7 @@ public class Game extends JFrame{
         frame.setLocationRelativeTo(null);
         
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.getRootPane().setDefaultButton(btnSubmit);
+        frame.getRootPane().setDefaultButton(btnStart);
         
         btnStart.addActionListener(new ActionListener(){
 
@@ -201,8 +200,10 @@ public class Game extends JFrame{
 						}else filesFound = true;
 					}
 					if(filesFound){
+						frame.getRootPane().setDefaultButton(btnSubmit);
 						btnFileChooser.setEnabled(false);
 						tfAnswer.setEditable(true);
+						tfAnswer.requestFocus();
 						btnSubmit.setEnabled(true);
 						btnStart.setEnabled(false);
 						btnRestart.setEnabled(true);
@@ -224,6 +225,7 @@ public class Game extends JFrame{
         btnRestart.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				frame.getRootPane().setDefaultButton(btnStart);
 				dic.dic.clear();
 				dic.max = 0;
 				resetVars();
