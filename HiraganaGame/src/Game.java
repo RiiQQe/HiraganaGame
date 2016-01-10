@@ -1,14 +1,10 @@
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,13 +22,15 @@ public class Game extends JFrame{
 	
 	private JTextArea taResult;
 	
-	private JLabel lblAnswer, lblTranslate, lblStart, lblAllResults, lblMine;
+	private JLabel lblAnswer, lblTranslate, lblStart, lblMine;
 	
-	private JRadioButton rbTo, rbFrom;
+	private JRadioButton rbTo, rbFrom, rbCSV, rbTxt;
 	
 	private JScrollPane sp;
 	
 	private ButtonGroup bg = new ButtonGroup();
+	private ButtonGroup bgFiles = new ButtonGroup();
+	
 	
 	private JPanel panel2 = new JPanel();
 	private JPanel panel3 = new JPanel();
@@ -48,7 +46,7 @@ public class Game extends JFrame{
 	private boolean filesFound; 
 	
 	private String toText, fromText;
-	
+	private String toCSV, fromCSV;
 	private File fromFile, toFile;
 	
 	int size;
@@ -98,6 +96,11 @@ public class Game extends JFrame{
 		        "This doesn't really do anything");
 		menu.add(menuItem);
 		
+		rbCSV = new JRadioButton(".csv");
+		rbTxt = new JRadioButton(".txt");
+		
+		rbTxt.setSelected(true);
+		
     	rbTo = new JRadioButton("from - to");
     	rbFrom = new JRadioButton("to - from");
     	
@@ -140,6 +143,9 @@ public class Game extends JFrame{
     	bg.add(rbFrom);
     	bg.add(rbTo);
     	
+    	bgFiles.add(rbCSV);
+    	bgFiles.add(rbTxt);
+    	
     	sp = new JScrollPane(taResult);
     	btnCorr = new JButton("CORR = GREEN, WRONG = RED");
     	btnCorr.setEnabled(false);
@@ -161,6 +167,9 @@ public class Game extends JFrame{
     	panel2.add(tfTo);
     	
     	panel2.add(btnFileChooser);
+    	
+    	panel2.add(rbCSV);
+    	panel2.add(rbTxt);
     	
     	
     	panel.add(lblTranslate);
@@ -213,18 +222,31 @@ public class Game extends JFrame{
 						fromText = fromText + ".txt";
 					}
 					
-					if(rbTo.isSelected()) 
-						if(!dic.loadDic(fromText, toText)){
-							JOptionPane.showMessageDialog(null, "Couldn't find the files");
-							filesFound = false;
-						}else filesFound = true;
-					
-					else {
-						if(!dic.loadDic(toText, fromText)){
+					if(rbTo.isSelected() && rbTxt.isSelected()){
+						if(!dic.loadDicFromTxt(fromText, toText)){
 							JOptionPane.showMessageDialog(null, "Couldn't find the files");
 							filesFound = false;
 						}else filesFound = true;
 					}
+					else if(rbFrom.isSelected() && rbTxt.isSelected()){
+						if(!dic.loadDicFromTxt(toText, fromText)){
+							JOptionPane.showMessageDialog(null, "Couldn't find the files");
+							filesFound = false;
+						}else filesFound = true;
+					}
+					else if(rbTo.isSelected() && rbCSV.isSelected()){
+						if(!dic.loadDicFromCSV(fromCSV, toCSV)){
+							JOptionPane.showMessageDialog(null, "Couldn't find the files");
+							filesFound = false;
+						}else filesFound = true;
+					}
+					else if(rbFrom.isSelected() && rbCSV.isSelected()){
+						if(!dic.loadDicFromCSV(fromCSV, fromCSV)){
+							JOptionPane.showMessageDialog(null, "Couldn't find the files");
+							filesFound = false;
+						}else filesFound = true;
+					}
+					
 					if(filesFound){
 						tfAnswer.requestFocus();
 						frame.getRootPane().setDefaultButton(btnSubmit);

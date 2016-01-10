@@ -20,7 +20,7 @@ public class dictionary {
 	
 	private Random random = new Random();
 	
-	public boolean loadDic(String from, String to){
+	public boolean loadDicFromTxt(String from, String to){
 		dic.clear();
 		try{
 			BufferedReader brInFrom = new BufferedReader(new FileReader(from));
@@ -46,6 +46,34 @@ public class dictionary {
 			return false;
 		}
 		
+	}
+	
+	public boolean loadDicFromCSV(String from, String to){
+		dic.clear();
+		from = "TEST.csv";
+		try{
+			BufferedReader brInFrom = new BufferedReader(new FileReader(from));
+			
+			int k = 0;
+			String line = "";
+			
+			
+			while((line = brInFrom.readLine()) != null){
+				line = line.trim().toLowerCase();
+				String[] words = line.split(",");
+				word w = new word(words[0], words[1], false);
+				dic.add(w);
+				k++;
+			}
+			max = k - 1;
+			brInFrom.close();
+			return true;
+			
+			
+		}catch(IOException e2){
+			System.out.println(e2);
+			return false;
+		}
 	}
 	
 	protected void addWrong(LinkedList<String> from, LinkedList<String> to){
