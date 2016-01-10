@@ -46,7 +46,7 @@ public class Game extends JFrame{
 	private boolean filesFound; 
 	
 	private String toText, fromText;
-	private String toCSV, fromCSV;
+	private String fromCSV;
 	private File fromFile, toFile;
 	
 	int size;
@@ -221,7 +221,7 @@ public class Game extends JFrame{
 						toText = toText + ".txt";
 						fromText = fromText + ".txt";
 					}
-					if(rbCSV.isSelected()){
+					if(!fileChoosen && rbCSV.isSelected()){
 						fromCSV = tfFrom.getText();
 						fromCSV = fromCSV.replace(".csv", "");
 						fromCSV = fromCSV + ".csv";

@@ -1,22 +1,14 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
-
-import javax.swing.JOptionPane;
 
 public class dictionary {
 
 	public LinkedList<word> dic = new LinkedList<word>();
 	
 	public int max, min = 0;
-	
-	public boolean[] ifDone;
-	
-	private int randomNr;
-	private String randomString;
 	
 	private Random random = new Random();
 	
@@ -138,12 +130,12 @@ public class dictionary {
     	return "";
     }
     
-    protected boolean has(String s, String k, boolean shouldBeTrue){
+    /*protected boolean has(String s, String k, boolean shouldBeTrue){
     	
     	//word w = new word(s,k,false);
 
 		/*This should work with dic.contains(word), but somehow it doesn't*/
-    	for(int i = 0; i < dic.size(); i++){
+    	/*for(int i = 0; i < dic.size(); i++){
     		
     		
     		if(s.equals(dic.get(i).lang1) && k.equals(dic.get(i).lang2)) return true;
@@ -153,7 +145,7 @@ public class dictionary {
     	
     	
     	return false;
-    }
+    }*/
     
     
 }
