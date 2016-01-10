@@ -48,22 +48,31 @@ public class dictionary {
 		
 	}
 	
-	public boolean loadDicFromCSV(String from, String to){
+	public boolean loadDicFromCSV(String from, boolean ifChecked){
 		dic.clear();
-		System.out.println("FROM: " + from);
+		
 		try{
 			BufferedReader brInFrom = new BufferedReader(new FileReader(from));
 			
 			int k = 0;
 			String line = "";
 			
-			
-			while((line = brInFrom.readLine()) != null){
-				line = line.trim().toLowerCase();
-				String[] words = line.split(",");
-				word w = new word(words[0], words[1], false);
-				dic.add(w);
-				k++;
+			if(ifChecked){
+				while((line = brInFrom.readLine()) != null){
+					line = line.trim().toLowerCase();
+					String[] words = line.split(",");
+					word w = new word(words[0], words[1], false);
+					dic.add(w);
+					k++;
+				}
+			}else{
+				while((line = brInFrom.readLine()) != null){
+					line = line.trim().toLowerCase();
+					String[] words = line.split(",");
+					word w = new word(words[1], words[0], false);
+					dic.add(w);
+					k++;
+				}
 			}
 			max = k - 1;
 			brInFrom.close();

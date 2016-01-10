@@ -240,14 +240,14 @@ public class Game extends JFrame{
 						}else filesFound = true;
 					}
 					else if(rbTo.isSelected() && rbCSV.isSelected()){
-						if(!dic.loadDicFromCSV(fromCSV, toCSV)){
-							JOptionPane.showMessageDialog(null, "Couldn't find the files");
+						if(!dic.loadDicFromCSV(fromCSV, true)){
+							JOptionPane.showMessageDialog(null, "Couldn't find the file");
 							filesFound = false;
 						}else filesFound = true;
 					}
 					else if(rbFrom.isSelected() && rbCSV.isSelected()){
-						if(!dic.loadDicFromCSV(fromCSV, fromCSV)){
-							JOptionPane.showMessageDialog(null, "Couldn't find the files");
+						if(!dic.loadDicFromCSV(fromCSV, false)){
+							JOptionPane.showMessageDialog(null, "Couldn't find the file");
 							filesFound = false;
 						}else filesFound = true;
 					}
@@ -354,26 +354,30 @@ public class Game extends JFrame{
 					toFile = fc.getSelectedFile();
 					
 					toText = toFile.getPath();
+					String fileName = "";
+					if(!rbCSV.isSelected()) {
+						fileName = toFile.getName().replace(".txt", "");
+						tfTo.setText(fileName);
+					}
+					else {
+						fileName = toFile.getName().replace(".csv", "");
+						tfFrom.setText(fileName);
+					}
 					
-					tfTo.setText(toFile.getName().replace(".txt", ""));
 				}
-				
-				returnVal = fc.showOpenDialog(Game.this);
-				fc.setDialogTitle("Choose file with the translations");
-				
-				if(returnVal == JFileChooser.APPROVE_OPTION){
-					fromFile = fc.getSelectedFile();
+				if(!rbCSV.isSelected()){
+					returnVal = fc.showOpenDialog(Game.this);
+					fc.setDialogTitle("Choose file with the translations");
 					
-					fromText = fromFile.getPath();
-					
-					tfFrom.setText(fromFile.getName().replace(".txt", ""));
-					fileChoosen = true;
+					if(returnVal == JFileChooser.APPROVE_OPTION){
+						fromFile = fc.getSelectedFile();
+						
+						fromText = fromFile.getPath();
+						
+						tfFrom.setText(fromFile.getName().replace(".txt", ""));
+						fileChoosen = true;
+					}
 				}
-				
-				
-			
-				
-				
 			}
         	
         });
@@ -413,7 +417,6 @@ public class Game extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
 				if(rbCSV.isSelected()){
 					tfTo.setEnabled(false);
 				}
@@ -460,6 +463,8 @@ public class Game extends JFrame{
 		btnCorr.setBackground(Color.GRAY);
 		
 		tfFrom.requestFocus();
+		if(rbCSV.isSelected())
+		tfTo.setEnabled(false);
 		
 	}
 	
