@@ -24,7 +24,7 @@ public class Game extends JFrame{
 	
 	private JTextArea taResult;
 	
-	String toText, FromText;
+	String toText, fromText;
 	
 	File fromFile, toFile;
 	
@@ -65,17 +65,14 @@ public class Game extends JFrame{
 	
 	private String pathToLogo = "Logo.png";
 	
+	private boolean fileChoosen = false;
+	
 	public Game() {
         initUI();
     }
 
     
 	private void initUI() {
-		
-		colors[0] = Color.RED;
-		colors[1] = Color.ORANGE;
-		colors[2] = Color.GREEN;
-		
 		ImageIcon logo = new ImageIcon(pathToLogo);
 		
     	rbTo = new JRadioButton("from - to");
@@ -90,7 +87,6 @@ public class Game extends JFrame{
     	btnMine.setBorderPainted(false);
     	btnMine.setFocusPainted(false);
     	btnMine.setContentAreaFilled(false);
-    	
     	
     	btnRestart.setEnabled(false);
     	
@@ -180,24 +176,27 @@ public class Game extends JFrame{
 				if(rbTo.isSelected() || rbFrom.isSelected()){
 					
 					resetVars();
+					if(!fileChoosen){
+						toText = tfTo.getText();
+						fromText = tfFrom.getText();
+						
+						toText = toText.replace(".txt", "");
+						fromText = fromText.replace(".txt", "");
+						
+						toText = toText + ".txt";
+						fromText = fromText + ".txt";
+					}
 					
-					toText = tfTo.getText();
-					FromText = tfFrom.getText();
-					
-					toText = toText.replace(".txt", "");
-					FromText = FromText.replace(".txt", "");
-					
-					toText = toText + ".txt";
-					FromText = FromText + ".txt";
+					System.out.println("filepath: " + toText);
 					
 					if(rbTo.isSelected()) 
-						if(!dic.loadDic(FromText, toText)){
+						if(!dic.loadDic(fromText, toText)){
 							JOptionPane.showMessageDialog(null, "Couldn't find the files");
 							filesFound = false;
 						}else filesFound = true;
 					
 					else {
-						if(!dic.loadDic(toText, FromText)){
+						if(!dic.loadDic(toText, fromText)){
 							JOptionPane.showMessageDialog(null, "Couldn't find the files");
 							filesFound = false;
 						}else filesFound = true;
@@ -303,6 +302,8 @@ public class Game extends JFrame{
 				if(returnVal == JFileChooser.APPROVE_OPTION){
 					toFile = fc.getSelectedFile();
 					
+					toText = toFile.getPath();
+					
 					tfTo.setText(toFile.getName().replace(".txt", ""));
 				}
 				
@@ -311,7 +312,11 @@ public class Game extends JFrame{
 				
 				if(returnVal == JFileChooser.APPROVE_OPTION){
 					fromFile = fc.getSelectedFile();
+					
+					fromText = fromFile.getPath();
+					
 					tfFrom.setText(fromFile.getName().replace(".txt", ""));
+					fileChoosen = true;
 				}
 				
 				
