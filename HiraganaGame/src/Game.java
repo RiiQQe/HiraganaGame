@@ -226,7 +226,6 @@ public class Game extends JFrame{
 						fromCSV = fromCSV.replace(".csv", "");
 						fromCSV = fromCSV + ".csv";
 					}
-					System.out.println(toCSV);
 					
 					if(rbTo.isSelected() && rbTxt.isSelected()){
 						if(!dic.loadDicFromTxt(fromText, toText)){
@@ -405,6 +404,31 @@ public class Game extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "This is how you use it...");
 				System.out.println("hesjan");
+				
+			}
+        	
+        });
+        
+        rbCSV.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(rbCSV.isSelected()){
+					tfTo.setEnabled(false);
+				}
+				
+			}
+        	
+        });
+        
+        rbTxt.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(rbTxt.isSelected()){
+					tfTo.setEnabled(true);
+				}
 				
 			}
         	
