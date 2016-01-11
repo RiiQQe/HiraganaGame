@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -41,6 +42,10 @@ public class TESTING extends JFrame{
 	private JPanel panel2 = new JPanel();
 	private JPanel panel3 = new JPanel();
 	
+	private JMenuBar menuBar;
+	private JMenu menu;
+	private JMenuItem menuCSVFile, menuTxtFile;
+	
 	private boolean filesFound; 
 	
 	int size;
@@ -74,20 +79,69 @@ public class TESTING extends JFrame{
     
 	private void initUI() {
 		
-		btnFileChooser = new JButton("File chooser");
+		menuBar = new JMenuBar();
+		
+		menu = new JMenu("File");
+		menu.setMnemonic(KeyEvent.VK_A);
+		menu.getAccessibleContext().setAccessibleDescription(
+		        "The only menu in this program that has menu items");
+		
+		menuBar.add(menu);
+		//a group of JmenuCSVFiles
+		menuCSVFile = new JMenuItem("Add CSV-file",
+		                         KeyEvent.VK_T);
+		menuCSVFile.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_1, ActionEvent.ALT_MASK));
+		menuCSVFile.getAccessibleContext().setAccessibleDescription(
+		        "This doesn't really do anything");
+		menu.add(menuCSVFile);
+		
+		menuTxtFile = new JMenuItem("Add TXT-files",
+                KeyEvent.VK_T);
+		menuTxtFile.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		menuTxtFile.getAccessibleContext().setAccessibleDescription(
+		"This doesn't really do anything");
+		menu.add(menuTxtFile);
+		
+		tfTranslate = new JTextField("hejsan");
+		tfAnswer = new JTextField("Answer here");
+		tfTranslate = new JTextField("Translate this: ");
+		btnSubmit = new JButton("Submit");
+		btnMine = new JButton("Creator: Rickard Lindstedt");
+		btnStart = new JButton("Start");
+		
+		tfTranslate.setEnabled(false);
+		
+		btnMine.setBorderPainted(false);
+    	btnMine.setFocusPainted(false);
+    	btnMine.setContentAreaFilled(false);
 		
 		panel.setLayout(new GridLayout(3,2));
-		panel.add(btnFileChooser);
 		
-		taResult = new JTextArea("", 120, 0);
-
+		panel2.setLayout(new GridLayout(3,2));
+		
+		panel3.setLayout(new GridLayout());
+		
+		taResult = new JTextArea("", 500, 0);
+		taResult.setEditable(false);
+		
 		sp = new JScrollPane(taResult);
 		
 		panel.add(sp);
+		panel.add(tfTranslate);
+		panel.add(tfAnswer);
+		
+		
+		panel2.add(btnSubmit);
+		
+		panel3.add(btnMine);
 		
 		frame.setLayout(new GridLayout(3,2));
 		
 		frame.add(panel);
+		frame.add(panel2);
+		frame.add(panel3);
 		
 		frame.pack();
     	frame.setVisible(true);
@@ -97,8 +151,21 @@ public class TESTING extends JFrame{
         frame.setLocationRelativeTo(null);
         
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        System.out.println("hejsan");
+
+        frame.setJMenuBar(menuBar);
+        
+        menuTxtFile.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
+        });
     }
+	
+	
 	
 	
 	public static void main(String[] args) {

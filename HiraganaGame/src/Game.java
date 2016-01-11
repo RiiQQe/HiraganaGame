@@ -72,10 +72,6 @@ public class Game extends JFrame{
     
 	private void initUI() {
 		
-		colors[0] = Color.RED;
-		colors[1] = Color.ORANGE;
-		colors[2] = Color.GREEN;
-		
 		ImageIcon logo = new ImageIcon(pathToLogo);
 		
     	rbHir = new JRadioButton("Eng - Hir");
